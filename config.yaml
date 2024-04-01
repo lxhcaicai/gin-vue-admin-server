@@ -1,2 +1,12 @@
 jwt:
   expires-time: 7d
+
+zap:
+  level: info
+  prefix: '[github.com/lxhcaicai/gin-vue-admin/server]'
+  format: console
+  director: log
+  encode-level: LowercaseColorLevelEncoder
+  stacktrace-key: stacktrace
+  show-line: true
+  log-in-console: true

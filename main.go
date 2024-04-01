@@ -9,4 +9,5 @@ import (
 func main() {
 	global.GVA_VP = core.Viper() // 初始化Viper
 	initialize.OtherInit()
+	global.GVA_LOG = core.Zap()
 }
