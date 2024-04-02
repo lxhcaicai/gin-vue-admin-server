@@ -10,3 +10,17 @@ zap:
   stacktrace-key: stacktrace
   show-line: true
   log-in-console: true
+mysql:
+  prefix: ""
+  port: "30294"
+  config: charset=utf8mb4&parseTime=True&loc=Local
+  db-name: gva-test
+  username: root
+  password: "123456"
+  path: 192.168.74.111
+  engine: ""
+  log-mode: error
+  max-idle-conns: 10
+  max-open-conns: 100
+  singular: false
+  log-zap: false
