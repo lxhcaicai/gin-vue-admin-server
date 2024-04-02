@@ -24,3 +24,7 @@ mysql:
   max-open-conns: 100
   singular: false
   log-zap: false
+system:
+  db-type: mysql
+  router-prefix: ""
+  addr: 7777
