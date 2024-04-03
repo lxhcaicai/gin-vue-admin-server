@@ -6,5 +6,6 @@ type Server struct {
 	System System `mapstructure:"system" json:"system" yaml:"system"`
 
 	// gorm
-	Mysql Mysql `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
+	Mysql  Mysql           `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
+	DBList []SpecializedDB `mapstructure:"db-list" json:"db-list" yaml:"db-list"`
 }

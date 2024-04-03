@@ -12,6 +12,7 @@ import (
 var (
 	GVA_DB     *gorm.DB
 	GVA_VP     *viper.Viper
+	GVA_DBList map[string]*gorm.DB
 	GVA_CONFIG config.Server
 	GVA_LOG    *zap.Logger
 	GVA_Timer  timer.Timer = timer.NewTimerTask()

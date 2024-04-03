@@ -28,3 +28,20 @@ system:
   db-type: mysql
   router-prefix: ""
   addr: 7777
+db-list:
+  - type: ""
+    alias-name: ""
+    prefix: ""
+    port: ""
+    config: ""
+    db-name: ""
+    username: ""
+    password: ""
+    path: ""
+    engine: ""
+    log-mode: ""
+    max-idle-conns: 10
+    max-open-conns: 100
+    singular: false
+    log-zap: false
+    disable: true

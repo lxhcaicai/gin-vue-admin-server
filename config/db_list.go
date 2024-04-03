@@ -1,5 +1,9 @@
 package config
 
+type DsnProvider interface {
+	Dsn() string
+}
+
 type GeneralDB struct {
 	Prefix string `mapstructure:"prefix" json:"prefix" yaml:"prefix"`
 
@@ -15,4 +19,11 @@ type GeneralDB struct {
 	MaxIdleConns int    `mapstructure:"max-idle-conns" json:"max-idle-conns" yaml:"max-idle-conns"` // 空闲中的最大连接数
 	MaxOpenConns int    `mapstructure:"max-open-conns" json:"max-open-conns" yaml:"max-open-conns"` // 打开到数据库的最大连接数
 
+}
+
+type SpecializedDB struct {
+	Type      string `mapstructure:"type" json:"type" yaml:"type"`
+	AliasName string `mapstructure:"alias-name" json:"alias-name" yaml:"alias-name"`
+	GeneralDB `yaml:",inline" mapstructure:",squash"`
+	Disable   bool `mapstructure:"disable" json:"disable" yaml:"disable"`
 }
