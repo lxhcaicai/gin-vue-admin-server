@@ -33,11 +33,6 @@ func (z *Zap) ZapEncodeLevel() zapcore.LevelEncoder {
 	}
 }
 
-// TransportLevel
-//
-//	@Description: 根据字符串转化为 zapcore.Level
-//	@receiver z
-//	@return zapcore.Level
 func (z *Zap) TransportLevel() zapcore.Level {
 	z.Level = strings.ToLower(z.Level)
 	switch z.Level {

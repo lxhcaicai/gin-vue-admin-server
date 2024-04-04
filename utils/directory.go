@@ -5,12 +5,6 @@ import (
 	"os"
 )
 
-// PathExists
-//
-//	@Description: 文件目录是否存在
-//	@param path
-//	@return bool
-//	@return error
 func PathExists(path string) (bool, error) {
 	fi, err := os.Stat(path)
 	if err == nil {

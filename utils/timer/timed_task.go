@@ -5,8 +5,6 @@ import (
 	"sync"
 )
 
-// Timer
-// @Description: 定时任务接口
 type Timer interface {
 
 	// 通过函数的方法添加任务
@@ -24,16 +22,11 @@ type taskManager struct {
 	tasks map[cron.EntryID]*task
 }
 
-// timer
-// @Description: 定时任务管理
 type timer struct {
 	cronList map[string]*taskManager
 	sync.Mutex
 }
 
-// AddTaskByFunc
-//
-//	@Description:通过函数的方法添加任务
 func (t *timer) AddTaskByFunc(cronName string, spec string, fun func(), taskName string, option ...cron.Option) (cron.EntryID, error) {
 	t.Lock()
 	defer t.Unlock()
