@@ -28,6 +28,8 @@ system:
   db-type: mysql
   router-prefix: ""
   addr: 7777
+  use-multipoint: true
+  use-redis: true
 db-list:
   - type: ""
     alias-name: ""
@@ -51,3 +53,7 @@ captcha:
   img-height: 80
   open-captcha: 0
   open-captcha-timeout: 3600
+redis:
+  addr: 192.168.74.111:32366
+  password: "123456"
+  db: 0
