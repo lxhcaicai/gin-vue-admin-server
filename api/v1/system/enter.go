@@ -8,4 +8,5 @@ type ApiGroup struct {
 
 var (
 	userService = service.ServiceGroupApp.SystemServiceGroup.UserService
+	jwtService  = service.ServiceGroupApp.SystemServiceGroup.JwtService
 )
