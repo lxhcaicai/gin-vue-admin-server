@@ -31,6 +31,7 @@ func Routers() *gin.Engine {
 	}
 	{
 		systemRouter.InitBaseRouter(PublicGroup)
+		systemRouter.InitInitRouter(PublicGroup)
 	}
 
 	global.GVA_LOG.Info("router register success")
