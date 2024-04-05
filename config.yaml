@@ -14,7 +14,7 @@ mysql:
   prefix: ""
   port: "30294"
   config: charset=utf8mb4&parseTime=True&loc=Local
-  db-name: gva-test
+  db-name: gva
   username: root
   password: "123456"
   path: 192.168.74.111
