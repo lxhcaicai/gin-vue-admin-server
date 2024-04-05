@@ -5,14 +5,16 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/response"
 	systemRes "github.com/lxhcaicai/gin-vue-admin/server/model/system/response"
+	"github.com/lxhcaicai/gin-vue-admin/server/utils/captcha"
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"
 	"time"
 )
 
 // 当开启多服务器部署时，替换下面的配置，使用redis共享存储验证码
-// var store = captcha.NewDefaultRedisStore()
-var store = base64Captcha.DefaultMemStore
+var store = captcha.NewDefaultRedisStore()
+
+//var store = base64Captcha.DefaultMemStore
 
 type BaseApi struct {
 }
