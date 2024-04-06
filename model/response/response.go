@@ -35,3 +35,15 @@ func FailWithMessage(message string, c *gin.Context) {
 func OkWithMessage(message string, c *gin.Context) {
 	Result(SUCCESS, map[string]interface{}{}, message, c)
 }
+
+func NoAuth(message string, c *gin.Context) {
+	c.JSON(http.StatusUnauthorized, Response{
+		7,
+		nil,
+		message,
+	})
+}
+
+func FailWithDetailed(data interface{}, message string, c *gin.Context) {
+	Result(ERROR, data, message, c)
+}
