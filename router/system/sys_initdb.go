@@ -13,5 +13,6 @@ func (s *InitRouter) InitInitRouter(Router *gin.RouterGroup) {
 	dbApi := v1.ApiGroupApp.SystemApiGroup.DBApi
 	{
 		initRouter.POST("initdb", dbApi.InitDB)
+		initRouter.POST("checkdb", dbApi.CheckDB) //检测是否需要初始化数据库
 	}
 }
