@@ -5,6 +5,7 @@ import "github.com/lxhcaicai/gin-vue-admin/server/service"
 type ApiGroup struct {
 	BaseApi
 	DBApi
+	SystemApi
 }
 
 var (
