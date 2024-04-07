@@ -15,5 +15,6 @@ func (s *SysRouter) InitSystemRouter(Router *gin.RouterGroup) {
 		sysRouter.POST("getServerInfo", systemApi.GetServerInfo)
 		sysRouter.POST("getSystemConfig", systemApi.GetSystemConfig)
 		sysRouter.POST("setSystemConfig", systemApi.SetSystemConfig)
+		sysRouter.POST("reloadSystem", systemApi.ReloadSystem)
 	}
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/model/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	systemRes "github.com/lxhcaicai/gin-vue-admin/server/model/system/response"
+	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
 )
 
@@ -68,4 +69,21 @@ func (s *SystemApi) SetSystemConfig(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("设置成功", c)
+}
+
+// ReloadSystem
+// @Tags      System
+// @Summary   重启系统
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Success   200  {object}  response.Response{msg=string}  "重启系统"
+// @Router    /system/reloadSystem [post]
+func (s *SystemApi) ReloadSystem(c *gin.Context) {
+	err := utils.Reload()
+	if err != nil {
+		global.GVA_LOG.Error("重启系统失败!", zap.Error(err))
+		response.FailWithMessage("重启系统失败", c)
+		return
+	}
+	response.OkWithMessage("重启系统成功", c)
 }

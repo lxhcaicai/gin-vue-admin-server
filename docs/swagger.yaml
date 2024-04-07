@@ -500,6 +500,25 @@ paths:
       summary: 获取配置文件内容
       tags:
       - System
+  /system/reloadSystem:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 重启系统
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 重启系统
+      tags:
+      - System
   /system/setSystemConfig:
     post:
       parameters:
