@@ -7,6 +7,10 @@ import (
 	"go.uber.org/zap"
 )
 
+// @securityDefinitions.apikey  ApiKeyAuth
+// @in                          header
+// @name                        x-token
+// @BasePath                    /
 func main() {
 	global.GVA_VP = core.Viper() // 初始化Viper
 	initialize.OtherInit()

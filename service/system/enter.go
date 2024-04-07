@@ -6,4 +6,5 @@ type ServiceGroup struct {
 	InitDBService
 	CasbinService
 	OperationRecordService
+	SystemConfigService
 }

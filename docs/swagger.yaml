@@ -251,4 +251,31 @@ paths:
       summary: 初始化用户数据库
       tags:
       - InitDB
+  /system/getServerInfo:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取服务器信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取服务器信息
+      tags:
+      - System
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: x-token
+    type: apiKey
 swagger: "2.0"
