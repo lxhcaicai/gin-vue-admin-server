@@ -257,6 +257,53 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/system/setSystemConfig": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "设置配置文件内容",
+                "parameters": [
+                    {
+                        "description": "设置配置文件内容",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.System"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "设置配置文件内容",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -766,6 +813,14 @@ const docTemplate = `{
                 "uuid": {
                     "description": "用户UUID \t// 用户UUID",
                     "type": "string"
+                }
+            }
+        },
+        "system.System": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "$ref": "#/definitions/config.Server"
                 }
             }
         }

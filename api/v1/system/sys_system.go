@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/response"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	systemRes "github.com/lxhcaicai/gin-vue-admin/server/model/system/response"
 	"go.uber.org/zap"
 )
@@ -43,4 +44,28 @@ func (s *SystemApi) GetSystemConfig(c *gin.Context) {
 		return
 	}
 	response.OkWithDetailed(systemRes.SysConfigResponse{Config: config}, "获取成功", c)
+}
+
+// SetSystemConfig
+// @Tags      System
+// @Summary   设置配置文件内容
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Param     data  body      system.System                   true  "设置配置文件内容"
+// @Success   200   {object}  response.Response{data=string}  "设置配置文件内容"
+// @Router    /system/setSystemConfig [post]
+func (s *SystemApi) SetSystemConfig(c *gin.Context) {
+	var sys system.System
+	err := c.ShouldBindJSON(&sys)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = systemConfigService.SetSystemConfig(sys)
+	if err != nil {
+		global.GVA_LOG.Error("设置失败", zap.Error(err))
+		response.FailWithMessage("设置失败", c)
+		return
+	}
+	response.OkWithMessage("设置成功", c)
 }

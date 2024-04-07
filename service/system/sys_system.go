@@ -3,6 +3,7 @@ package system
 import (
 	"github.com/lxhcaicai/gin-vue-admin/server/config"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
 )
@@ -31,4 +32,16 @@ func (systemConfigService *SystemConfigService) GetServerInfo() (server *utils.S
 
 func (systemConfigService *SystemConfigService) GetSystemConfig() (config config.Server, err error) {
 	return global.GVA_CONFIG, nil
+}
+
+// SetSystemConfig
+//
+//	@Description: 设置配置文件
+func (systemConfigService *SystemConfigService) SetSystemConfig(system system.System) (err error) {
+	cs := utils.StructToMap(system.Config)
+	for k, v := range cs {
+		global.GVA_VP.Set(k, v)
+	}
+	err = global.GVA_VP.WriteConfig()
+	return err
 }

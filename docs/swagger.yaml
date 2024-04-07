@@ -356,6 +356,11 @@ definitions:
         description: "用户UUID \t// 用户UUID"
         type: string
     type: object
+  system.System:
+    properties:
+      config:
+        $ref: '#/definitions/config.Server'
+    type: object
 info:
   contact: {}
 paths:
@@ -493,6 +498,32 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 获取配置文件内容
+      tags:
+      - System
+  /system/setSystemConfig:
+    post:
+      parameters:
+      - description: 设置配置文件内容
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.System'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 设置配置文件内容
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 设置配置文件内容
       tags:
       - System
 securityDefinitions:
