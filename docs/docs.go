@@ -218,9 +218,327 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/system/getSystemConfig": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "获取配置文件内容",
+                "responses": {
+                    "200": {
+                        "description": "获取配置文件内容,返回包括系统配置",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.SysConfigResponse"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "config.Autocode": {
+            "type": "object",
+            "properties": {
+                "root": {
+                    "type": "string"
+                }
+            }
+        },
+        "config.Captcha": {
+            "type": "object",
+            "properties": {
+                "img-height": {
+                    "description": "验证码高度",
+                    "type": "integer"
+                },
+                "img-width": {
+                    "description": "验证码宽度",
+                    "type": "integer"
+                },
+                "key-long": {
+                    "description": "验证码长度",
+                    "type": "integer"
+                },
+                "open-captcha": {
+                    "type": "integer"
+                },
+                "open-captcha-timeout": {
+                    "description": "防爆破验证码超时时间，单位：s(秒)",
+                    "type": "integer"
+                }
+            }
+        },
+        "config.JWT": {
+            "type": "object",
+            "properties": {
+                "buffer-time": {
+                    "description": "缓冲时间",
+                    "type": "string"
+                },
+                "expires-time": {
+                    "description": "过期时间",
+                    "type": "string"
+                },
+                "issuer": {
+                    "description": "签发者",
+                    "type": "string"
+                },
+                "signing-key": {
+                    "description": "jwt签名",
+                    "type": "string"
+                }
+            }
+        },
+        "config.Mysql": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "description": "高级配置",
+                    "type": "string"
+                },
+                "db-name": {
+                    "description": "数据库名",
+                    "type": "string"
+                },
+                "engine": {
+                    "description": "数据库引擎，默认InnoDB",
+                    "type": "string",
+                    "default": "InnoDB"
+                },
+                "log-mode": {
+                    "description": "是否开启Gorm全局日志",
+                    "type": "string"
+                },
+                "max-idle-conns": {
+                    "description": "空闲中的最大连接数",
+                    "type": "integer"
+                },
+                "max-open-conns": {
+                    "description": "打开到数据库的最大连接数",
+                    "type": "integer"
+                },
+                "password": {
+                    "description": "数据库密码",
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "string"
+                },
+                "prefix": {
+                    "type": "string"
+                },
+                "singular": {
+                    "description": "是否开启全局禁用复数，true表示开启",
+                    "type": "boolean"
+                },
+                "username": {
+                    "description": "数据库密码",
+                    "type": "string"
+                }
+            }
+        },
+        "config.Redis": {
+            "type": "object",
+            "properties": {
+                "addr": {
+                    "description": "服务器地址:端口",
+                    "type": "string"
+                },
+                "db": {
+                    "description": "redis的哪个数据库",
+                    "type": "integer"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                }
+            }
+        },
+        "config.Server": {
+            "type": "object",
+            "properties": {
+                "autocode": {
+                    "$ref": "#/definitions/config.Autocode"
+                },
+                "captcha": {
+                    "$ref": "#/definitions/config.Captcha"
+                },
+                "db-list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/config.SpecializedDB"
+                    }
+                },
+                "jwt": {
+                    "$ref": "#/definitions/config.JWT"
+                },
+                "mysql": {
+                    "description": "gorm",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/config.Mysql"
+                        }
+                    ]
+                },
+                "redis": {
+                    "$ref": "#/definitions/config.Redis"
+                },
+                "system": {
+                    "$ref": "#/definitions/config.System"
+                },
+                "zap": {
+                    "$ref": "#/definitions/config.Zap"
+                }
+            }
+        },
+        "config.SpecializedDB": {
+            "type": "object",
+            "properties": {
+                "alias-name": {
+                    "type": "string"
+                },
+                "config": {
+                    "description": "高级配置",
+                    "type": "string"
+                },
+                "db-name": {
+                    "description": "数据库名",
+                    "type": "string"
+                },
+                "disable": {
+                    "type": "boolean"
+                },
+                "engine": {
+                    "description": "数据库引擎，默认InnoDB",
+                    "type": "string",
+                    "default": "InnoDB"
+                },
+                "log-mode": {
+                    "description": "是否开启Gorm全局日志",
+                    "type": "string"
+                },
+                "max-idle-conns": {
+                    "description": "空闲中的最大连接数",
+                    "type": "integer"
+                },
+                "max-open-conns": {
+                    "description": "打开到数据库的最大连接数",
+                    "type": "integer"
+                },
+                "password": {
+                    "description": "数据库密码",
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "string"
+                },
+                "prefix": {
+                    "type": "string"
+                },
+                "singular": {
+                    "description": "是否开启全局禁用复数，true表示开启",
+                    "type": "boolean"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "username": {
+                    "description": "数据库密码",
+                    "type": "string"
+                }
+            }
+        },
+        "config.System": {
+            "type": "object",
+            "properties": {
+                "addr": {
+                    "description": "端口值",
+                    "type": "integer"
+                },
+                "db-type": {
+                    "description": "数据库类型:mysql(默认)|sqlite|sqlserver|postgresql",
+                    "type": "string"
+                },
+                "router-prefix": {
+                    "type": "string"
+                },
+                "use-multipoint": {
+                    "description": "多点登录拦截",
+                    "type": "boolean"
+                },
+                "use-redis": {
+                    "description": "使用redis",
+                    "type": "boolean"
+                }
+            }
+        },
+        "config.Zap": {
+            "type": "object",
+            "properties": {
+                "director": {
+                    "description": "日志文件夹",
+                    "type": "string"
+                },
+                "encode-level": {
+                    "description": "编码级",
+                    "type": "string"
+                },
+                "format": {
+                    "description": "输出",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "级别",
+                    "type": "string"
+                },
+                "log-in-console": {
+                    "description": "输出控制台",
+                    "type": "boolean"
+                },
+                "prefix": {
+                    "description": "日志前缀",
+                    "type": "string"
+                },
+                "show-line": {
+                    "description": "显示行",
+                    "type": "boolean"
+                },
+                "stacktrace-key": {
+                    "description": "栈名",
+                    "type": "string"
+                }
+            }
+        },
         "request.InitDB": {
             "type": "object",
             "required": [
@@ -317,6 +635,14 @@ const docTemplate = `{
                 },
                 "picPath": {
                     "type": "string"
+                }
+            }
+        },
+        "response.SysConfigResponse": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "$ref": "#/definitions/config.Server"
                 }
             }
         },

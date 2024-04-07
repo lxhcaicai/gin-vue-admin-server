@@ -1,6 +1,7 @@
 package system
 
 import (
+	"github.com/lxhcaicai/gin-vue-admin/server/config"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
@@ -26,4 +27,8 @@ func (systemConfigService *SystemConfigService) GetServerInfo() (server *utils.S
 	}
 
 	return &s, nil
+}
+
+func (systemConfigService *SystemConfigService) GetSystemConfig() (config config.Server, err error) {
+	return global.GVA_CONFIG, nil
 }

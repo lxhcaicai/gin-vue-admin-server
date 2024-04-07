@@ -12,6 +12,7 @@ func (s *SysRouter) InitSystemRouter(Router *gin.RouterGroup) {
 	sysRouter := Router.Group("system").Use(middleware.OperationRecord())
 	systemApi := v1.ApiGroupApp.SystemApiGroup.SystemApi
 	{
-		sysRouter.POST("/getServerInfo", systemApi.GetServerInfo)
+		sysRouter.POST("getServerInfo", systemApi.GetServerInfo)
+		sysRouter.POST("getSystemConfig", systemApi.GetSystemConfig)
 	}
 }
