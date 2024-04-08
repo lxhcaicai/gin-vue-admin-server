@@ -341,6 +341,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/admin_register": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "用户注册账号",
+                "parameters": [
+                    {
+                        "description": "用户名, 昵称, 密码, 角色ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.Register"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "用户注册账号,返回包括用户信息",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.SysUserResponse"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user/getUserInfo": {
             "get": {
                 "security": [
@@ -791,6 +836,47 @@ const docTemplate = `{
                 }
             }
         },
+        "request.Register": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string",
+                    "example": "int 角色id"
+                },
+                "authorityIds": {
+                    "type": "string",
+                    "example": "[]uint 角色id"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "电子邮箱"
+                },
+                "enable": {
+                    "type": "string",
+                    "example": "int 是否启用"
+                },
+                "headerImg": {
+                    "type": "string",
+                    "example": "头像链接"
+                },
+                "nickName": {
+                    "type": "string",
+                    "example": "昵称"
+                },
+                "passWord": {
+                    "type": "string",
+                    "example": "密码"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "电话号码"
+                },
+                "userName": {
+                    "type": "string",
+                    "example": "用户名"
+                }
+            }
+        },
         "response.LoginResponse": {
             "type": "object",
             "properties": {
@@ -854,6 +940,14 @@ const docTemplate = `{
             "properties": {
                 "config": {
                     "$ref": "#/definitions/config.Server"
+                }
+            }
+        },
+        "response.SysUserResponse": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/system.SysUser"
                 }
             }
         },
