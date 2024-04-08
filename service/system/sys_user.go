@@ -2,6 +2,7 @@ package system
 
 import (
 	"fmt"
+	"github.com/gofrs/uuid/v5"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
@@ -24,4 +25,18 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 		MenuServiceApp.UserAuthorityDefaultRouter(&user)
 	}
 	return &user, err
+}
+
+// GetUserInfo
+//
+//	@Description: 获取用户信息
+func (userService *UserService) GetUserInfo(uuid uuid.UUID) (user system.SysUser, err error) {
+	var reqUser system.SysUser
+	err = global.GVA_DB.Preload("Authorities").Preload("Authority").First(&reqUser, "uuid = ?", uuid).Error
+	if err != nil {
+		return reqUser, err
+	}
+	MenuServiceApp.UserAuthorityDefaultRouter(&reqUser)
+	return reqUser, err
+
 }

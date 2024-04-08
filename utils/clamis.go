@@ -2,6 +2,7 @@ package utils
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gofrs/uuid/v5"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	systemReq "github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
 	"net"
@@ -53,4 +54,18 @@ func GetClaims(c *gin.Context) (*systemReq.CustomClaims, error) {
 		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析信息失败, 请检查请求头是否存在x-token且claims是否为规定结构")
 	}
 	return claims, err
+}
+
+// GetUserUuid 从Gin的Context中获取从jwt解析出来的用户UUID
+func GetUserUuid(c *gin.Context) uuid.UUID {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := GetClaims(c); err != nil {
+			return uuid.UUID{}
+		} else {
+			return cl.UUID
+		}
+	} else {
+		waitUse := claims.(*systemReq.CustomClaims)
+		return waitUse.UUID
+	}
 }
