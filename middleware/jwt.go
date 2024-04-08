@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
-	"github.com/lxhcaicai/gin-vue-admin/server/model/response"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	"github.com/lxhcaicai/gin-vue-admin/server/service"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"

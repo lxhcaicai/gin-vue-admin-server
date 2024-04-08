@@ -3,7 +3,7 @@ package system
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
-	"github.com/lxhcaicai/gin-vue-admin/server/model/response"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
 	"go.uber.org/zap"
 )

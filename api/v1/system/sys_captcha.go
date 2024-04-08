@@ -3,7 +3,7 @@ package system
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
-	"github.com/lxhcaicai/gin-vue-admin/server/model/response"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
 	systemRes "github.com/lxhcaicai/gin-vue-admin/server/model/system/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils/captcha"
 	"github.com/mojocn/base64Captcha"
