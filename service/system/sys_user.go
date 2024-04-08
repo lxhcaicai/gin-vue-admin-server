@@ -9,6 +9,7 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
+	"time"
 )
 
 type UserService struct{}
@@ -85,4 +86,46 @@ func (userService *UserService) ChangePassword(u *system.SysUser, newPassword st
 	user.Password = utils.BcryptHash(newPassword)
 	err = global.GVA_DB.Save(&user).Error
 	return &user, err
+}
+
+func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint) (err error) {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		TxErr := tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
+		if TxErr != nil {
+			return TxErr
+		}
+		var useAuthority []system.SysUserAuthority
+		for _, v := range authorityIds {
+			useAuthority = append(useAuthority, system.SysUserAuthority{
+				SysUserId:               id,
+				SysAuthorityAuthorityId: v,
+			})
+		}
+		TxErr = tx.Create(&useAuthority).Error
+		if TxErr != nil {
+			return TxErr
+		}
+		TxErr = tx.Where("id = ?", id).First(&system.SysUser{}).Update("authority_id", authorityIds[0]).Error
+		if TxErr != nil {
+			return TxErr
+		}
+		// 返回 nil 提交事务
+
+		return nil
+	})
+}
+
+func (userService *UserService) SetUserInfo(req system.SysUser) error {
+	return global.GVA_DB.Model(&system.SysUser{}).
+		Select("updated_at", "nick_name", "header_img", "phone", "email", "sideMode", "enable").
+		Where("id=?", req.ID).
+		Updates(map[string]interface{}{
+			"updated_at": time.Now(),
+			"nick_name":  req.NickName,
+			"header_img": req.HeaderImg,
+			"phone":      req.Phone,
+			"email":      req.Email,
+			"side_mode":  req.SideMode,
+			"enable":     req.Enable,
+		}).Error
 }

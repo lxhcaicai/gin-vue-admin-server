@@ -250,3 +250,52 @@ func (b *BaseApi) ChangePassword(c *gin.Context) {
 	}
 	response.OkWithMessage("修改成功", c)
 }
+
+// SetUserInfo
+// @Tags      SysUser
+// @Summary   设置用户信息
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysUser                                             true  "ID, 用户名, 昵称, 头像链接"
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "设置用户信息"
+// @Router    /user/setUserInfo [put]
+func (b *BaseApi) SetUserInfo(c *gin.Context) {
+	var user systemReq.ChangeUserInfo
+	err := c.ShouldBindJSON(&user)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(user, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	if len(user.AuthorityIds) != 0 {
+		err = userService.SetUserAuthorities(user.ID, user.AuthorityIds)
+		if err != nil {
+			global.GVA_LOG.Error("设置失败!", zap.Error(err))
+			response.FailWithMessage("设置失败", c)
+			return
+		}
+	}
+	err = userService.SetUserInfo(system.SysUser{
+		GVA_MODEL: global.GVA_MODEL{
+			ID: user.ID,
+		},
+		NickName:  user.NickName,
+		HeaderImg: user.HeaderImg,
+		Phone:     user.Phone,
+		Email:     user.Email,
+		SideMode:  user.SideMode,
+		Enable:    user.Enable,
+	})
+	if err != nil {
+		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		response.FailWithMessage("设置失败", c)
+		return
+	}
+	response.OkWithMessage("设置成功", c)
+}
