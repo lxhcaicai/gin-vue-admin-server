@@ -235,6 +235,18 @@ definitions:
       username:
         type: string
     type: object
+  request.PageInfo:
+    properties:
+      keyword:
+        description: 关键字
+        type: string
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+    type: object
   response.LoginResponse:
     properties:
       expiresAt:
@@ -243,6 +255,16 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/system.SysUser'
+    type: object
+  response.PageResult:
+    properties:
+      list: {}
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      total:
+        type: integer
     type: object
   response.Response:
     properties:
@@ -567,6 +589,36 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 获取用户信息
+      tags:
+      - SysUser
+  /user/getUserList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 页码, 每页大小
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.PageInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 分页获取用户列表,返回包括列表,总数,页码,每页数量
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PageResult'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取用户列表
       tags:
       - SysUser
 securityDefinitions:

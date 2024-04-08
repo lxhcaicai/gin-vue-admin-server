@@ -12,6 +12,7 @@ func (s *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	userRouterWithoutRecord := Router.Group("user")
 	baseApi := v1.ApiGroupApp.SystemApiGroup.BaseApi
 	{
-		userRouterWithoutRecord.GET("getUserInfo", baseApi.GetUserInfo) // 获取用户信息
+		userRouterWithoutRecord.POST("getUserList", baseApi.GetUserList) // 分页获取用户列表
+		userRouterWithoutRecord.GET("getUserInfo", baseApi.GetUserInfo)  // 获取用户信息
 	}
 }

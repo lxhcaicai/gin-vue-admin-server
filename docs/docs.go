@@ -383,6 +383,59 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user/getUserList": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "分页获取用户列表",
+                "parameters": [
+                    {
+                        "description": "页码, 每页大小",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.PageInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "分页获取用户列表,返回包括列表,总数,页码,每页数量",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.PageResult"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -721,6 +774,23 @@ const docTemplate = `{
                 }
             }
         },
+        "request.PageInfo": {
+            "type": "object",
+            "properties": {
+                "keyword": {
+                    "description": "关键字",
+                    "type": "string"
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                }
+            }
+        },
         "response.LoginResponse": {
             "type": "object",
             "properties": {
@@ -732,6 +802,21 @@ const docTemplate = `{
                 },
                 "user": {
                     "$ref": "#/definitions/system.SysUser"
+                }
+            }
+        },
+        "response.PageResult": {
+            "type": "object",
+            "properties": {
+                "list": {},
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },
