@@ -291,6 +291,16 @@ definitions:
         example: 用户名
         type: string
     type: object
+  request.SetUserAuthorities:
+    properties:
+      authorityIds:
+        description: 角色ID
+        items:
+          type: integer
+        type: array
+      id:
+        type: integer
+    type: object
   response.LoginResponse:
     properties:
       expiresAt:
@@ -805,6 +815,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 重置用户密码
+      tags:
+      - SysUser
+  /user/setUserAuthorities:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户UUID, 角色ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SetUserAuthorities'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 设置用户权限
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 设置用户权限
       tags:
       - SysUser
   /user/setUserInfo:

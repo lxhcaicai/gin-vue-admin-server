@@ -680,6 +680,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/setUserAuthorities": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "设置用户权限",
+                "parameters": [
+                    {
+                        "description": "用户UUID, 角色ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SetUserAuthorities"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "设置用户权限",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user/setUserInfo": {
             "put": {
                 "security": [
@@ -1147,6 +1197,21 @@ const docTemplate = `{
                 "userName": {
                     "type": "string",
                     "example": "用户名"
+                }
+            }
+        },
+        "request.SetUserAuthorities": {
+            "type": "object",
+            "properties": {
+                "authorityIds": {
+                    "description": "角色ID",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "id": {
+                    "type": "integer"
                 }
             }
         },

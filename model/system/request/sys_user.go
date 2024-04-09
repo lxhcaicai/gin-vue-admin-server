@@ -38,3 +38,8 @@ type ChangeUserInfo struct {
 	Enable       int                   `json:"enable" gorm:"comment:冻结用户"`                                                           //冻结用户
 	Authorities  []system.SysAuthority `json:"-" gorm:"many2many:sys_user_authority;"`
 }
+
+type SetUserAuthorities struct {
+	ID           uint
+	AuthorityIds []uint `json:"authorityIds"` // 角色ID
+}

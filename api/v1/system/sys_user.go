@@ -395,3 +395,28 @@ func (b *BaseApi) ResetPassword(c *gin.Context) {
 	}
 	response.OkWithMessage("重置成功", c)
 }
+
+// SetUserAuthorities
+// @Tags      SysUser
+// @Summary   设置用户权限
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      systemReq.SetUserAuthorities   true  "用户UUID, 角色ID"
+// @Success   200   {object}  response.Response{msg=string}  "设置用户权限"
+// @Router    /user/setUserAuthorities [post]
+func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
+	var sua systemReq.SetUserAuthorities
+	err := c.ShouldBindJSON(&sua)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = userService.SetUserAuthorities(sua.ID, sua.AuthorityIds)
+	if err != nil {
+		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		response.FailWithMessage("修改失败", c)
+		return
+	}
+	response.OkWithMessage("修改成功", c)
+}
