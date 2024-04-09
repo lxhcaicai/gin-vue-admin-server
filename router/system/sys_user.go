@@ -23,5 +23,6 @@ func (s *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		userRouter.PUT("setUserInfo", baseApi.SetUserInfo)        //设置用户信息
 		userRouter.PUT("setSelfInfo", baseApi.SetSelfInfo)        // 设置自身信息
 		userRouter.DELETE("deleteUser", baseApi.DeleteUser)       // 删除用户
+		userRouter.POST("resetPassword", baseApi.ResetPassword)   // 重置密码
 	}
 }

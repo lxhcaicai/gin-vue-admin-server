@@ -150,3 +150,11 @@ func (userService *UserService) DeleteUser(id int) (err error) {
 		return nil
 	})
 }
+
+// ResetPassword
+//
+//	@Description: 修改用户密码
+func (userService *UserService) ResetPassword(ID uint) (err error) {
+	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.BcryptHash("123456")).Error
+	return err
+}

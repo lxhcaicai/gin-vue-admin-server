@@ -781,6 +781,32 @@ paths:
       summary: 分页获取用户列表
       tags:
       - SysUser
+  /user/resetPassword:
+    post:
+      parameters:
+      - description: ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 重置用户密码
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 重置用户密码
+      tags:
+      - SysUser
   /user/setUserInfo:
     put:
       consumes:

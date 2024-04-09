@@ -371,3 +371,27 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 	response.OkWithMessage("删除成功", c)
 
 }
+
+// ResetPassword
+// @Tags      SysUser
+// @Summary   重置用户密码
+// @Security  ApiKeyAuth
+// @Produce  application/json
+// @Param     data  body      system.SysUser                 true  "ID"
+// @Success   200   {object}  response.Response{msg=string}  "重置用户密码"
+// @Router    /user/resetPassword [post]
+func (b *BaseApi) ResetPassword(c *gin.Context) {
+	var user system.SysUser
+	err := c.ShouldBindJSON(&user)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = userService.ResetPassword(user.ID)
+	if err != nil {
+		global.GVA_LOG.Error("重置失败!", zap.Error(err))
+		response.FailWithMessage("重置失败"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("重置成功", c)
+}
