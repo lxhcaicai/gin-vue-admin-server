@@ -72,3 +72,28 @@ func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {
 	}
 	response.OkWithDetailed(gin.H{"reSysOperationRecord": reSysOperationRecord}, "查询成功", c)
 }
+
+// CreateSysOperationRecord
+// @Tags      SysOperationRecord
+// @Summary   创建SysOperationRecord
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysOperationRecord      true  "创建SysOperationRecord"
+// @Success   200   {object}  response.Response{msg=string}  "创建SysOperationRecord"
+// @Router    /sysOperationRecord/createSysOperationRecord [post]
+func (s *OperationRecordApi) CreateSysOperationRecord(c *gin.Context) {
+	var sysOperationRecord system.SysOperationRecord
+	err := c.ShouldBindJSON(&sysOperationRecord)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = operationRecordService.CreateSysOperationRecord(sysOperationRecord)
+	if err != nil {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("创建失败", c)
+		return
+	}
+	response.OkWithMessage("创建成功", c)
+}

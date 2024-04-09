@@ -14,5 +14,6 @@ func (s *OperationRecordRouter) InitSysOperationRecordRouter(Router *gin.RouterG
 	{
 		operationRecordRouter.GET("getSysOperationRecordList", authorityMenuApi.GetSysOperationRecordList)
 		operationRecordRouter.GET("findSysOperationRecord", authorityMenuApi.FindSysOperationRecord)
+		operationRecordRouter.POST("createSysOperationRecord", authorityMenuApi.CreateSysOperationRecord)
 	}
 }
