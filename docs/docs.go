@@ -730,6 +730,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/setUserAuthority": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "更改用户权限",
+                "parameters": [
+                    {
+                        "description": "用户UUID, 角色ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SetUserAuth"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "设置用户权限",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user/setUserInfo": {
             "put": {
                 "security": [
@@ -1197,6 +1247,15 @@ const docTemplate = `{
                 "userName": {
                     "type": "string",
                     "example": "用户名"
+                }
+            }
+        },
+        "request.SetUserAuth": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "description": "角色IDqq",
+                    "type": "integer"
                 }
             }
         },

@@ -43,3 +43,8 @@ type SetUserAuthorities struct {
 	ID           uint
 	AuthorityIds []uint `json:"authorityIds"` // 角色ID
 }
+
+// Modify  user's auth structure
+type SetUserAuth struct {
+	AuthorityId uint `json:"authorityId"` // 角色IDqq
+}

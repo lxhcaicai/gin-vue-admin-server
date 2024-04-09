@@ -291,6 +291,12 @@ definitions:
         example: 用户名
         type: string
     type: object
+  request.SetUserAuth:
+    properties:
+      authorityId:
+        description: 角色IDqq
+        type: integer
+    type: object
   request.SetUserAuthorities:
     properties:
       authorityIds:
@@ -843,6 +849,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 设置用户权限
+      tags:
+      - SysUser
+  /user/setUserAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户UUID, 角色ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SetUserAuth'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 设置用户权限
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 更改用户权限
       tags:
       - SysUser
   /user/setUserInfo:

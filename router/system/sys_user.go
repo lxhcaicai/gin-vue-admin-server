@@ -25,5 +25,6 @@ func (s *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		userRouter.DELETE("deleteUser", baseApi.DeleteUser)               // 删除用户
 		userRouter.POST("resetPassword", baseApi.ResetPassword)           // 重置密码
 		userRouter.POST("setUserAuthorities", baseApi.SetUserAuthorities) // 设置用户权限组
+		userRouter.POST("setUserAuthority", baseApi.SetUserAuthority)     // 设置用户权限
 	}
 }

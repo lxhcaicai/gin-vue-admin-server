@@ -11,6 +11,7 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
+	"strconv"
 	"time"
 )
 
@@ -419,4 +420,46 @@ func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("修改成功", c)
+}
+
+// SetUserAuthority
+// @Tags      SysUser
+// @Summary   更改用户权限
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      systemReq.SetUserAuth          true  "用户UUID, 角色ID"
+// @Success   200   {object}  response.Response{msg=string}  "设置用户权限"
+// @Router    /user/setUserAuthority [post]
+func (b *BaseApi) SetUserAuthority(c *gin.Context) {
+	var sua systemReq.SetUserAuth
+	err := c.ShouldBindJSON(&sua)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if UserVerifyErr := utils.Verify(sua, utils.SetUserAuthorityVerify); UserVerifyErr != nil {
+		response.FailWithMessage(UserVerifyErr.Error(), c)
+		return
+	}
+	userID := utils.GetUserID(c)
+	err = userService.SetUserAuthority(userID, sua.AuthorityId)
+	if err != nil {
+		global.GVA_LOG.Error("修改失败！", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	claims := utils.GetUserInfo(c)
+	j := &utils.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
+	claims.AuthorityId = sua.AuthorityId
+	if token, err := j.CreateToken(*claims); err != nil {
+		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+	} else {
+		c.Header("new-token", token)
+		c.Header("new-expires-at", strconv.FormatInt(claims.ExpiresAt.Unix(), 10))
+		utils.SetToken(c, token, int(claims.ExpiresAt.Unix()-time.Now().Unix())/60)
+		response.OkWithMessage("修改成功", c)
+	}
+
 }
