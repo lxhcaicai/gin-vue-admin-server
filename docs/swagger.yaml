@@ -204,6 +204,11 @@ definitions:
         description: 密码
         type: string
     type: object
+  request.GetById:
+    properties:
+      id:
+        type: integer
+    type: object
   request.InitDB:
     properties:
       dbName:
@@ -692,6 +697,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 用户修改密码
+      tags:
+      - SysUser
+  /user/deleteUser:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除用户
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户
       tags:
       - SysUser
   /user/getUserInfo:

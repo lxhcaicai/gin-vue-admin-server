@@ -135,3 +135,18 @@ func (userService *UserService) SetSelfInfo(req system.SysUser) error {
 		Where("id=?", req.ID).
 		Updates(req).Error
 }
+
+// DeleteUser
+//
+//	@Description: 删除用户
+func (userService *UserService) DeleteUser(id int) (err error) {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where("id = ?", id).Delete(&system.SysUser{}).Error; err != nil {
+			return err
+		}
+		if err := tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+}

@@ -335,3 +335,39 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 	}
 	response.OkWithMessage("设置成功", c)
 }
+
+// DeleteUser
+// @Tags      SysUser
+// @Summary   删除用户
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.GetById                true  "用户ID"
+// @Success   200   {object}  response.Response{msg=string}  "删除用户"
+// @Router    /user/deleteUser [delete]
+func (b *BaseApi) DeleteUser(c *gin.Context) {
+	var reqId request.GetById
+	err := c.ShouldBindJSON(&reqId)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(reqId, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	jwtId := utils.GetUserID(c)
+	if jwtId == uint(reqId.ID) {
+		response.FailWithMessage("删除失败, 自杀失败", c)
+		return
+	}
+	err = userService.DeleteUser(reqId.ID)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败!", c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
+
+}
