@@ -129,3 +129,9 @@ func (userService *UserService) SetUserInfo(req system.SysUser) error {
 			"enable":     req.Enable,
 		}).Error
 }
+
+func (userService *UserService) SetSelfInfo(req system.SysUser) error {
+	return global.GVA_DB.Model(&system.SysUser{}).
+		Where("id=?", req.ID).
+		Updates(req).Error
+}
