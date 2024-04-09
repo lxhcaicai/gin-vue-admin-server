@@ -5,4 +5,5 @@ type RouterGroup struct {
 	InitRouter
 	SysRouter
 	UserRouter
+	JwtRouter
 }

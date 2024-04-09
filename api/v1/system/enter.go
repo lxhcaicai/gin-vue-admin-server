@@ -6,6 +6,7 @@ type ApiGroup struct {
 	BaseApi
 	DBApi
 	SystemApi
+	JwtApi
 }
 
 var (
