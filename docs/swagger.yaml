@@ -565,6 +565,94 @@ paths:
       summary: jwt加入黑名单
       tags:
       - Jwt
+  /sysOperationRecord/getSysOperationRecordList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
+      - description: 代理
+        in: query
+        name: agent
+        type: string
+      - description: 请求Body
+        in: query
+        name: body
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 错误信息
+        in: query
+        name: error_message
+        type: string
+      - description: 请求ip
+        in: query
+        name: ip
+        type: string
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 延迟
+        in: query
+        name: latency
+        type: string
+      - description: 请求方法
+        in: query
+        name: method
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 请求路径
+        in: query
+        name: path
+        type: string
+      - description: 响应Body
+        in: query
+        name: resp
+        type: string
+      - description: 请求状态
+        in: query
+        name: status
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - description: 用户id
+        in: query
+        name: user_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 分页获取SysOperationRecord列表,返回包括列表,总数,页码,每页数量
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PageResult'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取SysOperationRecord列表
+      tags:
+      - SysOperationRecord
   /system/getServerInfo:
     post:
       produces:

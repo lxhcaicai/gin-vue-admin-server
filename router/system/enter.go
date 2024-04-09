@@ -6,4 +6,5 @@ type RouterGroup struct {
 	SysRouter
 	UserRouter
 	JwtRouter
+	OperationRecordRouter
 }
