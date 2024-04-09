@@ -13,5 +13,6 @@ func (s *OperationRecordRouter) InitSysOperationRecordRouter(Router *gin.RouterG
 	authorityMenuApi := v1.ApiGroupApp.SystemApiGroup.OperationRecordApi
 	{
 		operationRecordRouter.GET("getSysOperationRecordList", authorityMenuApi.GetSysOperationRecordList)
+		operationRecordRouter.GET("findSysOperationRecord", authorityMenuApi.FindSysOperationRecord)
 	}
 }

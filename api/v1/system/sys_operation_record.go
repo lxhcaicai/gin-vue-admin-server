@@ -4,7 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	systemReq "github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
+	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
 )
 
@@ -39,4 +41,34 @@ func (s *OperationRecordApi) GetSysOperationRecordList(c *gin.Context) {
 		Page:     pageInfo.Page,
 		PageSize: pageInfo.PageSize,
 	}, "获取成功", c)
+}
+
+// FindSysOperationRecord
+// @Tags      SysOperationRecord
+// @Summary   用id查询SysOperationRecord
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  query     system.SysOperationRecord                                  true  "Id"
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "用id查询SysOperationRecord"
+// @Router    /sysOperationRecord/findSysOperationRecord [get]
+func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {
+	var sysOperationRecord system.SysOperationRecord
+	err := c.ShouldBindQuery(&sysOperationRecord)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(sysOperationRecord, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	reSysOperationRecord, err := operationRecordService.GetSysOperationRecord(sysOperationRecord.ID)
+	if err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		response.FailWithMessage("查询失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"reSysOperationRecord": reSysOperationRecord}, "查询成功", c)
 }

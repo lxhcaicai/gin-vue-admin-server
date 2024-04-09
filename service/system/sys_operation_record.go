@@ -40,3 +40,11 @@ func (operationRecordService *OperationRecordService) GetSysOperationRecordInfoL
 	err = db.Order("id desc").Limit(limit).Offset(offset).Preload("User").Find(&sysOperationRecords).Error
 	return sysOperationRecords, total, err
 }
+
+// GetSysOperationRecord
+//
+//	@Description: 根据id获取单条操作记录
+func (operationRecordService *OperationRecordService) GetSysOperationRecord(id uint) (sysOperationRecord system.SysOperationRecord, err error) {
+	err = global.GVA_DB.Where("id = ?", id).First(&sysOperationRecord).Error
+	return
+}
