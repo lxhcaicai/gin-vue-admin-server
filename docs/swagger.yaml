@@ -637,6 +637,34 @@ paths:
       summary: 创建SysOperationRecord
       tags:
       - SysOperationRecord
+  /sysOperationRecord/deleteSysOperationRecord:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: SysOperationRecord模型
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysOperationRecord'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除SysOperationRecord
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除SysOperationRecord
+      tags:
+      - SysOperationRecord
   /sysOperationRecord/findSysOperationRecord:
     get:
       consumes:

@@ -97,3 +97,28 @@ func (s *OperationRecordApi) CreateSysOperationRecord(c *gin.Context) {
 	}
 	response.OkWithMessage("创建成功", c)
 }
+
+// DeleteSysOperationRecord
+// @Tags      SysOperationRecord
+// @Summary   删除SysOperationRecord
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysOperationRecord      true  "SysOperationRecord模型"
+// @Success   200   {object}  response.Response{msg=string}  "删除SysOperationRecord"
+// @Router    /sysOperationRecord/deleteSysOperationRecord [delete]
+func (s *OperationRecordApi) DeleteSysOperationRecord(c *gin.Context) {
+	var sysOperationRecord system.SysOperationRecord
+	err := c.ShouldBindJSON(&sysOperationRecord)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = operationRecordService.DeleteSysOperationRecord(sysOperationRecord)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
+}

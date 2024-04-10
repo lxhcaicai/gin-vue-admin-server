@@ -257,6 +257,56 @@
                 }
             }
         },
+        "/sysOperationRecord/deleteSysOperationRecord": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysOperationRecord"
+                ],
+                "summary": "删除SysOperationRecord",
+                "parameters": [
+                    {
+                        "description": "SysOperationRecord模型",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysOperationRecord"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除SysOperationRecord",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/sysOperationRecord/findSysOperationRecord": {
             "get": {
                 "security": [

@@ -48,3 +48,11 @@ func (operationRecordService *OperationRecordService) GetSysOperationRecord(id u
 	err = global.GVA_DB.Where("id = ?", id).First(&sysOperationRecord).Error
 	return
 }
+
+// DeleteSysOperationRecord
+//
+//	@Description: 删除操作记录
+func (operationRecordService *OperationRecordService) DeleteSysOperationRecord(sysOperationRecord system.SysOperationRecord) (err error) {
+	err = global.GVA_DB.Delete(&sysOperationRecord).Error
+	return err
+}
