@@ -16,5 +16,6 @@ func (s *OperationRecordRouter) InitSysOperationRecordRouter(Router *gin.RouterG
 		operationRecordRouter.GET("findSysOperationRecord", authorityMenuApi.FindSysOperationRecord)
 		operationRecordRouter.POST("createSysOperationRecord", authorityMenuApi.CreateSysOperationRecord)
 		operationRecordRouter.DELETE("deleteSysOperationRecord", authorityMenuApi.DeleteSysOperationRecord)
+		operationRecordRouter.DELETE("deleteSysOperationRecordByIds", authorityMenuApi.DeleteSysOperationRecordByIds)
 	}
 }

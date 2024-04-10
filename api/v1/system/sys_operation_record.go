@@ -3,6 +3,7 @@ package system
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/common/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	systemReq "github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
@@ -121,4 +122,29 @@ func (s *OperationRecordApi) DeleteSysOperationRecord(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("删除成功", c)
+}
+
+// DeleteSysOperationRecordByIds
+// @Tags      SysOperationRecord
+// @Summary   批量删除SysOperationRecord
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.IdsReq                 true  "批量删除SysOperationRecord"
+// @Success   200   {object}  response.Response{msg=string}  "批量删除SysOperationRecord"
+// @Router    /sysOperationRecord/deleteSysOperationRecordByIds [delete]
+func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c *gin.Context) {
+	var IDS request.IdsReq
+	err := c.ShouldBindJSON(&IDS)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = operationRecordService.DeleteSysOperationRecordByIds(IDS)
+	if err != nil {
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		response.FailWithMessage("批量删除失败", c)
+		return
+	}
+	response.OkWithMessage("批量删除成功", c)
 }

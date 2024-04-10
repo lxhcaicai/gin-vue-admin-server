@@ -2,6 +2,7 @@ package system
 
 import (
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/common/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	systemReq "github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
 )
@@ -54,5 +55,13 @@ func (operationRecordService *OperationRecordService) GetSysOperationRecord(id u
 //	@Description: 删除操作记录
 func (operationRecordService *OperationRecordService) DeleteSysOperationRecord(sysOperationRecord system.SysOperationRecord) (err error) {
 	err = global.GVA_DB.Delete(&sysOperationRecord).Error
+	return err
+}
+
+// DeleteSysOperationRecordByIds
+//
+//	@Description: 批量删除记录
+func (operationRecordService *OperationRecordService) DeleteSysOperationRecordByIds(ids request.IdsReq) (err error) {
+	err = global.GVA_DB.Delete(&[]system.SysOperationRecord{}, "id in (?)", ids.Ids).Error
 	return err
 }

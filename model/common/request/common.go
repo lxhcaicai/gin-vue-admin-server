@@ -9,3 +9,7 @@ type PageInfo struct {
 type GetById struct {
 	ID int `json:"id" form:"id"`
 }
+
+type IdsReq struct {
+	Ids []int `json:"ids" form:"ids"`
+}
