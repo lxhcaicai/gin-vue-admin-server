@@ -4,6 +4,59 @@
         "contact": {}
     },
     "paths": {
+        "/authority/createAuthority": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authority"
+                ],
+                "summary": "创建角色",
+                "parameters": [
+                    {
+                        "description": "权限id, 权限名, 父角色id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysAuthority"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "创建角色,返回包括系统角色详情",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.SysAuthorityResponse"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/authority/getAuthorityList": {
             "post": {
                 "security": [
@@ -1820,6 +1873,14 @@
                 }
             }
         },
+        "response.SysAuthorityResponse": {
+            "type": "object",
+            "properties": {
+                "authority": {
+                    "$ref": "#/definitions/system.SysAuthority"
+                }
+            }
+        },
         "response.SysCaptchaResponse": {
             "type": "object",
             "properties": {
@@ -1850,6 +1911,34 @@
             "properties": {
                 "user": {
                     "$ref": "#/definitions/system.SysUser"
+                }
+            }
+        },
+        "system.Meta": {
+            "type": "object",
+            "properties": {
+                "activeName": {
+                    "type": "string"
+                },
+                "closeTab": {
+                    "description": "自动关闭tab",
+                    "type": "boolean"
+                },
+                "defaultMenu": {
+                    "description": "是否是基础路由（开发中）",
+                    "type": "boolean"
+                },
+                "icon": {
+                    "description": "菜单图标",
+                    "type": "string"
+                },
+                "keepAlive": {
+                    "description": "是否缓存",
+                    "type": "boolean"
+                },
+                "title": {
+                    "description": "菜单名",
+                    "type": "string"
                 }
             }
         },
@@ -1904,7 +1993,135 @@
             }
         },
         "system.SysBaseMenu": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "authoritys": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysAuthority"
+                    }
+                },
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysBaseMenu"
+                    }
+                },
+                "component": {
+                    "description": "对应前端文件路径",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "hidden": {
+                    "description": "是否在列表隐藏",
+                    "type": "boolean"
+                },
+                "menuBtn": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysBaseMenuBtn"
+                    }
+                },
+                "meta": {
+                    "description": "附加属性",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/system.Meta"
+                        }
+                    ]
+                },
+                "name": {
+                    "description": "路由name",
+                    "type": "string"
+                },
+                "parameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysBaseMenuParameter"
+                    }
+                },
+                "parentId": {
+                    "description": "父菜单ID",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "路由path",
+                    "type": "string"
+                },
+                "sort": {
+                    "description": "排序标记",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "system.SysBaseMenuBtn": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sysBaseMenuID": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "system.SysBaseMenuParameter": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "key": {
+                    "description": "地址栏携带参数的key",
+                    "type": "string"
+                },
+                "sysBaseMenuID": {
+                    "type": "integer"
+                },
+                "type": {
+                    "description": "地址栏携带参数为params还是query",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "地址栏携带参数的值",
+                    "type": "string"
+                }
+            }
         },
         "system.SysOperationRecord": {
             "type": "object",

@@ -4,7 +4,13 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
+	systemReq "github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
+	"github.com/pkg/errors"
+	"gorm.io/gorm"
+	"strconv"
 )
+
+var ErrRoleExistence = errors.New("存在相同角色id")
 
 type AuthorityService struct {
 }
@@ -35,4 +41,31 @@ func (authorityService *AuthorityService) findChildrenAuthority(authority *syste
 		}
 	}
 	return err
+}
+
+func (authorityService *AuthorityService) CreateAuthority(auth system.SysAuthority) (authority system.SysAuthority, err error) {
+
+	if err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&system.SysAuthority{}).Error; !errors.Is(err, gorm.ErrRecordNotFound) {
+		return auth, ErrRoleExistence
+	}
+
+	e := global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		if err = tx.Create(&auth).Error; err != nil {
+			return err
+		}
+
+		auth.SysBaseMenus = systemReq.DefaultMenu()
+		if err = tx.Model(&auth).Association("SysBaseMenus").Replace(&auth.SysBaseMenus); err != nil {
+			return err
+		}
+		casbinInfos := systemReq.DefaultCasbin()
+		authorityId := strconv.Itoa(int(auth.AuthorityId))
+		rules := [][]string{}
+		for _, v := range casbinInfos {
+			rules = append(rules, []string{authorityId, v.Path, v.Method})
+		}
+		return CasbinServiceApp.AddPolicies(tx, rules)
+	})
+
+	return auth, e
 }

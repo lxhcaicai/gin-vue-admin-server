@@ -341,6 +341,11 @@ definitions:
       string:
         type: string
     type: object
+  response.SysAuthorityResponse:
+    properties:
+      authority:
+        $ref: '#/definitions/system.SysAuthority'
+    type: object
   response.SysCaptchaResponse:
     properties:
       captchaId:
@@ -361,6 +366,26 @@ definitions:
     properties:
       user:
         $ref: '#/definitions/system.SysUser'
+    type: object
+  system.Meta:
+    properties:
+      activeName:
+        type: string
+      closeTab:
+        description: 自动关闭tab
+        type: boolean
+      defaultMenu:
+        description: 是否是基础路由（开发中）
+        type: boolean
+      icon:
+        description: 菜单图标
+        type: string
+      keepAlive:
+        description: 是否缓存
+        type: boolean
+      title:
+        description: 菜单名
+        type: string
     type: object
   system.SysAuthority:
     properties:
@@ -398,6 +423,95 @@ definitions:
         type: string
     type: object
   system.SysBaseMenu:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      authoritys:
+        items:
+          $ref: '#/definitions/system.SysAuthority'
+        type: array
+      children:
+        items:
+          $ref: '#/definitions/system.SysBaseMenu'
+        type: array
+      component:
+        description: 对应前端文件路径
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      hidden:
+        description: 是否在列表隐藏
+        type: boolean
+      menuBtn:
+        items:
+          $ref: '#/definitions/system.SysBaseMenuBtn'
+        type: array
+      meta:
+        allOf:
+        - $ref: '#/definitions/system.Meta'
+        description: 附加属性
+      name:
+        description: 路由name
+        type: string
+      parameters:
+        items:
+          $ref: '#/definitions/system.SysBaseMenuParameter'
+        type: array
+      parentId:
+        description: 父菜单ID
+        type: string
+      path:
+        description: 路由path
+        type: string
+      sort:
+        description: 排序标记
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  system.SysBaseMenuBtn:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      desc:
+        type: string
+      name:
+        type: string
+      sysBaseMenuID:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  system.SysBaseMenuParameter:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      key:
+        description: 地址栏携带参数的key
+        type: string
+      sysBaseMenuID:
+        type: integer
+      type:
+        description: 地址栏携带参数为params还是query
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      value:
+        description: 地址栏携带参数的值
+        type: string
     type: object
   system.SysOperationRecord:
     properties:
@@ -502,6 +616,36 @@ definitions:
 info:
   contact: {}
 paths:
+  /authority/createAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 权限id, 权限名, 父角色id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysAuthority'
+      produces:
+      - applicatio n/json
+      responses:
+        "200":
+          description: 创建角色,返回包括系统角色详情
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.SysAuthorityResponse'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建角色
+      tags:
+      - Authority
   /authority/getAuthorityList:
     post:
       consumes:

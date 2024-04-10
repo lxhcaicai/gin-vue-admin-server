@@ -18,4 +18,5 @@ var (
 	systemConfigService    = service.ServiceGroupApp.SystemServiceGroup.SystemConfigService
 	operationRecordService = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
 	authorityService       = service.ServiceGroupApp.SystemServiceGroup.AuthorityService
+	casbinService          = service.ServiceGroupApp.SystemServiceGroup.CasbinService
 )

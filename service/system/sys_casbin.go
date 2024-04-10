@@ -6,11 +6,14 @@ import (
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 	"sync"
 )
 
 type CasbinService struct {
 }
+
+var CasbinServiceApp = new(CasbinService)
 
 var (
 	syncedCachedEnforcer *casbin.SyncedCachedEnforcer
@@ -50,4 +53,26 @@ func (casbinService *CasbinService) Casbin() *casbin.SyncedCachedEnforcer {
 		_ = syncedCachedEnforcer.LoadPolicy()
 	})
 	return syncedCachedEnforcer
+}
+
+// AddPolicies
+//
+//	@Description: 清除匹配的权限
+func (casbinService *CasbinService) AddPolicies(db *gorm.DB, rules [][]string) error {
+	var casbinRules []gormadapter.CasbinRule
+	for i := range rules {
+		casbinRules = append(casbinRules, gormadapter.CasbinRule{
+			Ptype: "P",
+			V0:    rules[i][0],
+			V1:    rules[i][1],
+			V2:    rules[i][2],
+		})
+	}
+	return db.Create(&casbinRules).Error
+}
+
+func (casbinService *CasbinService) FreshCasbin() (err error) {
+	e := casbinService.Casbin()
+	err = e.LoadPolicy()
+	return err
 }
