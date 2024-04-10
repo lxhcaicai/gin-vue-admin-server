@@ -8,6 +8,7 @@ type ApiGroup struct {
 	SystemApi
 	JwtApi
 	OperationRecordApi
+	AuthorityApi
 }
 
 var (
@@ -16,4 +17,5 @@ var (
 	initDBService          = service.ServiceGroupApp.SystemServiceGroup.InitDBService
 	systemConfigService    = service.ServiceGroupApp.SystemServiceGroup.SystemConfigService
 	operationRecordService = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
+	authorityService       = service.ServiceGroupApp.SystemServiceGroup.AuthorityService
 )

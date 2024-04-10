@@ -42,6 +42,7 @@ func Routers() *gin.Engine {
 		systemRouter.InitUserRouter(PrivateGroup)
 		systemRouter.InitJwtRouter(PrivateGroup)
 		systemRouter.InitSysOperationRecordRouter(PrivateGroup) // 操作记录
+		systemRouter.InitAuthorityRouter(PrivateGroup)          // 注册角色路由
 	}
 	global.GVA_LOG.Info("router register success")
 	return Router

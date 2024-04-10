@@ -7,4 +7,5 @@ type RouterGroup struct {
 	UserRouter
 	JwtRouter
 	OperationRecordRouter
+	AuthorityRouter
 }
