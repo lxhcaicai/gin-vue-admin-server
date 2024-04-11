@@ -115,3 +115,35 @@ func (a *AuthorityApi) DeleteAuthority(c *gin.Context) {
 	_ = casbinService.FreshCasbin()
 	response.OkWithMessage("删除成功", c)
 }
+
+// UpdateAuthority
+// @Tags      Authority
+// @Summary   更新角色信息
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysAuthority                                                true  "权限id, 权限名, 父角色id"
+// @Success   200   {object}  response.Response{data=systemRes.SysAuthorityResponse,msg=string}  "更新角色信息,返回包括系统角色详情"
+// @Router    /authority/updateAuthority [post]
+func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
+	var auth system.SysAuthority
+	err := c.ShouldBindJSON(&auth)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(auth, utils.AuthorityVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	authority, err := authorityService.UpdateAuthority(auth)
+	if err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败"+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(systemRes.SysAuthorityResponse{
+		Authority: authority,
+	}, "更新成功", c)
+}

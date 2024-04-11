@@ -120,3 +120,11 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 		return nil
 	})
 }
+
+// UpdateAuthority
+//
+//	@Description: 更改一个角色
+func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthority) (authority system.SysAuthority, err error) {
+	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&system.SysAuthority{}).Updates(&auth).Error
+	return auth, err
+}

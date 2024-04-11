@@ -704,6 +704,36 @@ paths:
       summary: 分页获取角色列表
       tags:
       - Authority
+  /authority/updateAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 权限id, 权限名, 父角色id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysAuthority'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新角色信息,返回包括系统角色详情
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.SysAuthorityResponse'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 更新角色信息
+      tags:
+      - Authority
   /base/captcha:
     post:
       consumes:
