@@ -18,5 +18,6 @@ func (s *AuthorityRouter) InitAuthorityRouter(Router *gin.RouterGroup) {
 	}
 	{
 		authorityRouter.POST("createAuthority", authorityApi.CreateAuthority) // 创建角色
+		authorityRouter.POST("deleteAuthority", authorityApi.DeleteAuthority) // 删除角色
 	}
 }

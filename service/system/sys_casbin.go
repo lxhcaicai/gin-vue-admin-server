@@ -76,3 +76,10 @@ func (casbinService *CasbinService) FreshCasbin() (err error) {
 	err = e.LoadPolicy()
 	return err
 }
+
+// RemoveFilteredPolicy
+//
+//	@Description: 使用数据库方法清理筛选的politicy 此方法需要调用FreshCasbin方法才可以在系统中即刻生效
+func (casbinService *CasbinService) RemoveFilteredPolicy(db *gorm.DB, authorityId string) error {
+	return db.Delete(&gormadapter.CasbinRule{}, "vo = ?", authorityId).Error
+}

@@ -57,6 +57,56 @@
                 }
             }
         },
+        "/authority/deleteAuthority": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authority"
+                ],
+                "summary": "删除角色",
+                "parameters": [
+                    {
+                        "description": "删除角色",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysAuthority"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除角色",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/authority/getAuthorityList": {
             "post": {
                 "security": [

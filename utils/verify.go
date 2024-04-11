@@ -8,4 +8,5 @@ var (
 	IdVerify               = Rules{"ID": []string{NotEmpty()}}
 	SetUserAuthorityVerify = Rules{"AuthorityId": {NotEmpty()}}
 	AuthorityVerify        = Rules{"AuthorityId": {NotEmpty()}, "AuthorityName": {NotEmpty()}}
+	AuthorityIdVerify      = Rules{"AuthorityId": {NotEmpty()}}
 )

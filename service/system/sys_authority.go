@@ -69,3 +69,54 @@ func (authorityService *AuthorityService) CreateAuthority(auth system.SysAuthori
 
 	return auth, e
 }
+
+// DeleteAuthority
+//
+//	@Description: 删除角色
+func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthority) error {
+	if errors.Is(global.GVA_DB.Debug().Preload("Users").First(&auth).Error, gorm.ErrRecordNotFound) {
+		return errors.New("该角色不存在")
+	}
+	if len(auth.Users) != 0 {
+		return errors.New("此角色有用户正在使用禁止删除")
+	}
+	if !errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&system.SysUser{}).Error, gorm.ErrRecordNotFound) {
+		return errors.New("此角色有用户正在使用禁止删除")
+	}
+	if !errors.Is(global.GVA_DB.Where("parent_id = ?", auth.AuthorityId).First(&system.SysAuthority{}).Error, gorm.ErrRecordNotFound) {
+		return errors.New("此角色存在子角色不允许删除")
+	}
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var err error
+		if err = tx.Preload("SysBaseMenus").Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(auth).Unscoped().Delete(auth).Error; err != nil {
+			return err
+		}
+
+		if len(auth.SysBaseMenus) > 0 {
+			if err = tx.Model(auth).Association("SysBaseMenus").Delete(auth.SysBaseMenus); err != nil {
+				return err
+			}
+		}
+
+		if len(auth.DataAuthorityId) > 0 {
+			if err = tx.Model(auth).Association("DataAuthorityId").Delete(auth.DataAuthorityId); err != nil {
+				return err
+			}
+		}
+
+		if err = tx.Delete(&system.SysUserAuthority{}, "sys_authority_authority_id = ?", auth.AuthorityId).Error; err != nil {
+			return err
+		}
+		if err = tx.Where("authority_id = ?", auth.AuthorityId).Delete(&[]system.SysAuthorityBtn{}).Error; err != nil {
+			return err
+		}
+
+		authorityId := strconv.Itoa(int(auth.AuthorityId))
+
+		if err = CasbinServiceApp.RemoveFilteredPolicy(tx, authorityId); err != nil {
+			return err
+		}
+
+		return nil
+	})
+}
