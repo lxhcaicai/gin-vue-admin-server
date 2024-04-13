@@ -5,6 +5,7 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	systemReq "github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/system/response"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"strconv"
@@ -127,4 +128,57 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthority) (authority system.SysAuthority, err error) {
 	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&system.SysAuthority{}).Updates(&auth).Error
 	return auth, err
+}
+
+// CopyAuthority
+//
+//	@Description: 复制一个角色
+func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (authority system.SysAuthority, err error) {
+	var authorityBox system.SysAuthority
+	if errors.Is(global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
+		return authority, ErrRoleExistence
+	}
+	copyInfo.Authority.Children = []system.SysAuthority{}
+	menus, err := MenuServiceApp.GetMenuAuthority(&request.GetAuthorityId{AuthorityId: copyInfo.OldAuthorityId})
+	if err != nil {
+		return
+	}
+
+	var baseMenu []system.SysBaseMenu
+	for _, v := range menus {
+		intNum, _ := strconv.Atoi(v.MenuId)
+		v.SysBaseMenu.ID = uint(intNum)
+		baseMenu = append(baseMenu, v.SysBaseMenu)
+	}
+	copyInfo.Authority.SysBaseMenus = baseMenu
+	err = global.GVA_DB.Create(&copyInfo.Authority).Error
+	if err != nil {
+		return
+	}
+
+	var btns []system.SysAuthorityBtn
+
+	err = global.GVA_DB.Find(&btns, "authority_id = ?", copyInfo.OldAuthorityId).Error
+	if err != nil {
+		return
+	}
+
+	if len(btns) > 0 {
+		for i := range btns {
+			btns[i].AuthorityId = copyInfo.Authority.AuthorityId
+		}
+		err = global.GVA_DB.Create(&btns).Error
+
+		if err != nil {
+			return
+
+		}
+	}
+
+	paths := CasbinServiceApp.GetPolicyPathByAuthorityId(copyInfo.OldAuthorityId)
+	err = CasbinServiceApp.UpdateCasbin(copyInfo.Authority.AuthorityId, paths)
+	if err != nil {
+		_ = authorityService.DeleteAuthority(&copyInfo.Authority)
+	}
+	return copyInfo.Authority, err
 }

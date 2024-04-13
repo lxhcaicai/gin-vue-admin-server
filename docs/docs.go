@@ -15,6 +15,59 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/authority/copyAuthority": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authority"
+                ],
+                "summary": "拷贝角色",
+                "parameters": [
+                    {
+                        "description": "旧角色id, 新权限id, 新权限名, 新父角色id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/response.SysAuthorityCopyResponse"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "拷贝角色,返回包括系统角色详情",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.SysAuthorityResponse"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/authority/createAuthority": {
             "post": {
                 "security": [
@@ -1984,6 +2037,17 @@ const docTemplate = `{
                 "data": {},
                 "string": {
                     "type": "string"
+                }
+            }
+        },
+        "response.SysAuthorityCopyResponse": {
+            "type": "object",
+            "properties": {
+                "authority": {
+                    "$ref": "#/definitions/system.SysAuthority"
+                },
+                "oldAuthorityId": {
+                    "type": "integer"
                 }
             }
         },

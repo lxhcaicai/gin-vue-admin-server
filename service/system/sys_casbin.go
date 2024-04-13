@@ -5,8 +5,11 @@ import (
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
+	"strconv"
 	"sync"
 )
 
@@ -82,4 +85,51 @@ func (casbinService *CasbinService) FreshCasbin() (err error) {
 //	@Description: 使用数据库方法清理筛选的politicy 此方法需要调用FreshCasbin方法才可以在系统中即刻生效
 func (casbinService *CasbinService) RemoveFilteredPolicy(db *gorm.DB, authorityId string) error {
 	return db.Delete(&gormadapter.CasbinRule{}, "vo = ?", authorityId).Error
+}
+
+// GetPolicyPathByAuthorityId
+//
+//	@Description: 获取权限列表
+func (casbinService *CasbinService) GetPolicyPathByAuthorityId(AuthorityID uint) (pathMaps []request.CasbinInfo) {
+	e := casbinService.Casbin()
+	authorityId := strconv.Itoa(int(AuthorityID))
+	list := e.GetFilteredPolicy(0, authorityId)
+	for _, v := range list {
+		pathMaps = append(pathMaps, request.CasbinInfo{
+			Path:   v[1],
+			Method: v[2],
+		})
+	}
+	return pathMaps
+}
+
+func (casbinService *CasbinService) UpdateCasbin(AuthorityID uint, casbinInfos []request.CasbinInfo) error {
+	authorityId := strconv.Itoa(int(AuthorityID))
+	casbinService.ClearCasbin(0, authorityId)
+	rules := [][]string{}
+
+	// 做权限去重处理
+	deduplicateMap := make(map[string]bool)
+	for _, v := range casbinInfos {
+		key := authorityId + v.Path + v.Method
+		if _, ok := deduplicateMap[key]; !ok {
+			deduplicateMap[key] = true
+			rules = append(rules, []string{authorityId, v.Path, v.Method})
+		}
+	}
+	e := casbinService.Casbin()
+	success, _ := e.AddPolicy(rules)
+	if !success {
+		return errors.New("存在相同api,添加失败,请联系管理员")
+	}
+	return nil
+}
+
+// ClearCasbin
+//
+//	@Description: 清除匹配的权限
+func (casbinService *CasbinService) ClearCasbin(v int, p ...string) bool {
+	e := casbinService.Casbin()
+	success, _ := e.RemoveFilteredPolicy(v, p...)
+	return success
 }

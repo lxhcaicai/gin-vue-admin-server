@@ -9,4 +9,5 @@ var (
 	SetUserAuthorityVerify = Rules{"AuthorityId": {NotEmpty()}}
 	AuthorityVerify        = Rules{"AuthorityId": {NotEmpty()}, "AuthorityName": {NotEmpty()}}
 	AuthorityIdVerify      = Rules{"AuthorityId": {NotEmpty()}}
+	OldAuthorityVerify     = Rules{"OldAuthorityId": {NotEmpty()}}
 )

@@ -2,9 +2,11 @@ package system
 
 import (
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/common/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 type MenuService struct{}
@@ -26,4 +28,34 @@ func (menuService *MenuService) UserAuthorityDefaultRouter(user *system.SysUser)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		user.Authority.DefaultRouter = "404"
 	}
+}
+
+// GetMenuAuthority
+//
+//	@Description: 查看当前角色树
+func (menuService *MenuService) GetMenuAuthority(info *request.GetAuthorityId) (menus []system.SysMenu, err error) {
+	var baseMenu []system.SysBaseMenu
+	var SysAuthorityMenus []system.SysAuthorityMenu
+	err = global.GVA_DB.Where("sys_authority_authority_id = ?", info.AuthorityId).Find(&SysAuthorityMenus).Error
+
+	if err != nil {
+		return
+	}
+
+	var MenusIds []string
+
+	for i := range SysAuthorityMenus {
+		MenusIds = append(MenusIds, SysAuthorityMenus[i].MenuId)
+	}
+	err = global.GVA_DB.Where("id in (?) ", MenusIds).Order("sort").Find(&baseMenu).Error
+
+	for i := range baseMenu {
+		menus = append(menus, system.SysMenu{
+			SysBaseMenu: baseMenu[i],
+			AuthorityId: info.AuthorityId,
+			MenuId:      strconv.Itoa(int(baseMenu[i].ID)),
+			Parameters:  baseMenu[i].Parameters,
+		})
+	}
+	return menus, err
 }

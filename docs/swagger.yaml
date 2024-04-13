@@ -341,6 +341,13 @@ definitions:
       string:
         type: string
     type: object
+  response.SysAuthorityCopyResponse:
+    properties:
+      authority:
+        $ref: '#/definitions/system.SysAuthority'
+      oldAuthorityId:
+        type: integer
+    type: object
   response.SysAuthorityResponse:
     properties:
       authority:
@@ -616,6 +623,36 @@ definitions:
 info:
   contact: {}
 paths:
+  /authority/copyAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 旧角色id, 新权限id, 新权限名, 新父角色id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/response.SysAuthorityCopyResponse'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 拷贝角色,返回包括系统角色详情
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.SysAuthorityResponse'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 拷贝角色
+      tags:
+      - Authority
   /authority/createAuthority:
     post:
       consumes:
