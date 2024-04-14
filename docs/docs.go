@@ -165,6 +165,48 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/getAllApis": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "获取所有的Api 不分页",
+                "responses": {
+                    "200": {
+                        "description": "获取所有的Api 不分页,返回包括api列表",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.SysAPIListResponse"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/getApiById": {
             "post": {
                 "security": [
@@ -2478,6 +2520,17 @@ const docTemplate = `{
                 "data": {},
                 "string": {
                     "type": "string"
+                }
+            }
+        },
+        "response.SysAPIListResponse": {
+            "type": "object",
+            "properties": {
+                "apis": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysApi"
+                    }
                 }
             }
         },

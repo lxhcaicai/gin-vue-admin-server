@@ -11,7 +11,7 @@ type ApiRouter struct {
 
 func (s *ApiRouter) InitApiRouter(Router *gin.RouterGroup, RouterPub *gin.RouterGroup) {
 	apiRouter := Router.Group("api").Use(middleware.OperationRecord())
-
+	apiRouterWithoutRecord := Router.Group("api")
 	apiRouterApi := v1.ApiGroupApp.SystemApiGroup.SystemApiApi
 	{
 		apiRouter.POST("createApi", apiRouterApi.CreateApi)               // 创建api
@@ -19,5 +19,8 @@ func (s *ApiRouter) InitApiRouter(Router *gin.RouterGroup, RouterPub *gin.Router
 		apiRouter.POST("getApiById", apiRouterApi.GetApiById)             // 获取单条Api消息
 		apiRouter.POST("updateApi", apiRouterApi.UpdateApi)               // 更新api
 		apiRouter.DELETE("deleteApisByIds", apiRouterApi.DeleteApisByIds) // 删除选中api
+	}
+	{
+		apiRouterWithoutRecord.POST("getAllApis", apiRouterApi.GetAllApis) // 获取所有api
 	}
 }

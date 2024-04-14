@@ -91,3 +91,11 @@ func (apiService *ApiService) DeleteApisByIds(ids request.IdsReq) (err error) {
 	}
 	return err
 }
+
+// GetAllApis
+//
+//	@Description: 获取所有的api
+func (apiService *ApiService) GetAllApis() (apis []system.SysApi, err error) {
+	err = global.GVA_DB.Find(&apis).Error
+	return
+}
