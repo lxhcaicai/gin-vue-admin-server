@@ -29,7 +29,11 @@ system:
   router-prefix: ""
   addr: 7777
   use-multipoint: true
+  oss-type: local
   use-redis: true
+local:
+  path: uploads/file
+  store-path: uploads/file
 db-list:
   - type: ""
     alias-name: ""

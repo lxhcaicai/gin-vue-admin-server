@@ -19,6 +19,7 @@ func Routers() *gin.Engine {
 	}
 
 	systemRouter := router.RouterGroupApp.System
+	exampleRouter := router.RouterGroupApp.Example
 
 	docs.SwaggerInfo.BasePath = global.GVA_CONFIG.System.RouterPrefix
 	Router.GET(global.GVA_CONFIG.System.RouterPrefix+"/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -45,6 +46,8 @@ func Routers() *gin.Engine {
 		systemRouter.InitAuthorityRouter(PrivateGroup)          // 注册角色路由
 		systemRouter.InitCasbinRouter(PrivateGroup)
 		systemRouter.InitApiRouter(PrivateGroup, PublicGroup)
+
+		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)
 	}
 	global.GVA_LOG.Info("router register success")
 	return Router

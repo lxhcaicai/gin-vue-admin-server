@@ -896,6 +896,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/fileUploadAndDownload/upload": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExaFileUploadAndDownload"
+                ],
+                "summary": "上传文件示例",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "上传文件示例",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "上传文件示例,返回包括文件详情",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.ExaFileResponse"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/init/checkdb": {
             "post": {
                 "produces": [
@@ -2135,6 +2186,19 @@ const docTemplate = `{
                 }
             }
         },
+        "config.Local": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "description": "本地文件访问路径",
+                    "type": "string"
+                },
+                "store-path": {
+                    "description": "本地文件存储路径",
+                    "type": "string"
+                }
+            }
+        },
         "config.Mysql": {
             "type": "object",
             "properties": {
@@ -2220,6 +2284,9 @@ const docTemplate = `{
                 },
                 "jwt": {
                     "$ref": "#/definitions/config.JWT"
+                },
+                "local": {
+                    "$ref": "#/definitions/config.Local"
                 },
                 "mysql": {
                     "description": "gorm",
@@ -2311,6 +2378,10 @@ const docTemplate = `{
                     "description": "数据库类型:mysql(默认)|sqlite|sqlserver|postgresql",
                     "type": "string"
                 },
+                "oss-type": {
+                    "description": "Oss类型",
+                    "type": "string"
+                },
                 "router-prefix": {
                     "type": "string"
                 },
@@ -2357,6 +2428,39 @@ const docTemplate = `{
                 },
                 "stacktrace-key": {
                     "description": "栈名",
+                    "type": "string"
+                }
+            }
+        },
+        "example.ExaFileUploadAndDownload": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "key": {
+                    "description": "编号",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "文件名",
+                    "type": "string"
+                },
+                "tag": {
+                    "description": "文件标签",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "url": {
+                    "description": "文件地址",
                     "type": "string"
                 }
             }
@@ -2608,6 +2712,14 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "response.ExaFileResponse": {
+            "type": "object",
+            "properties": {
+                "file": {
+                    "$ref": "#/definitions/example.ExaFileUploadAndDownload"
                 }
             }
         },

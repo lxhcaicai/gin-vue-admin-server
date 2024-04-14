@@ -13,4 +13,6 @@ type Server struct {
 	AutoCode Autocode `mapstructure:"autocode" json:"autocode" yaml:"autocode"`
 
 	Captcha Captcha `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
+
+	Local Local `mapstructure:"local" json:"local" yaml:"local"`
 }
