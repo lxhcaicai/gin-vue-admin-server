@@ -44,3 +44,30 @@ func (apiService *ApiService) GetApiById(id int) (api system.SysApi, err error) 
 	err = global.GVA_DB.Where("id = ?", id).First(&api).Error
 	return
 }
+
+// @author: [piexlmax](https://github.com/piexlmax)
+// @function: UpdateApi
+// @description: 根据id更新api
+// @param: api model.SysApi
+// @return: err error
+func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
+	var oldA system.SysApi
+	err = global.GVA_DB.Where("id = ?", api.ID).First(&oldA).Error
+	if oldA.Path != api.Path || oldA.Method != api.Method {
+		var duplicateApi system.SysApi
+		if err := global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&duplicateApi).Error; err != nil {
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return err
+			}
+		}
+	}
+	if err != nil {
+		err = CasbinServiceApp.UpdateCasbinApi(oldA.Path, api.Path, oldA.Method, api.Method)
+		if err != nil {
+			return err
+		} else {
+			err = global.GVA_DB.Save(&api).Error
+		}
+	}
+	return err
+}

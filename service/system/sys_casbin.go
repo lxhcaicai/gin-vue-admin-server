@@ -133,3 +133,20 @@ func (casbinService *CasbinService) ClearCasbin(v int, p ...string) bool {
 	success, _ := e.RemoveFilteredPolicy(v, p...)
 	return success
 }
+
+// UpdateCasbinApi
+//
+//	@Description: API更新随动
+func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
+	err := global.GVA_DB.Model(&gormadapter.CasbinRule{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
+		"v1": newPath,
+		"v2": newMethod,
+	}).Error
+
+	e := casbinService.Casbin()
+	err = e.LoadPolicy()
+	if err != nil {
+		return err
+	}
+	return err
+}

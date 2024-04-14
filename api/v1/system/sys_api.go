@@ -105,3 +105,33 @@ func (s *SystemApiApi) GetApiById(c *gin.Context) {
 	}
 	response.OkWithDetailed(systemRes.SysAPIResponse{Api: api}, "获取成功", c)
 }
+
+// UpdateApi
+// @Tags      SysApi
+// @Summary   修改基础api
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysApi                  true  "api路径, api中文描述, api组, 方法"
+// @Success   200   {object}  response.Response{msg=string}  "修改基础api"
+// @Router    /api/updateApi [post]
+func (s *SystemApiApi) UpdateApi(c *gin.Context) {
+	var api system.SysApi
+	err := c.ShouldBindJSON(&api)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(api, utils.ApiVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = apiService.UpdateApi(api)
+	if err != nil {
+		global.GVA_LOG.Error("修改失败!", zap.Error(err))
+		response.FailWithMessage("修改失败", c)
+		return
+	}
+	response.OkWithMessage("修改成功", c)
+}

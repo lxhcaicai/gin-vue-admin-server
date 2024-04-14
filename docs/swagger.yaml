@@ -761,6 +761,34 @@ paths:
       summary: 根据id获取api
       tags:
       - SysApi
+  /api/updateApi:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: api路径, api中文描述, api组, 方法
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysApi'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 修改基础api
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 修改基础api
+      tags:
+      - SysApi
   /authority/copyAuthority:
     post:
       consumes:
