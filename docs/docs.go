@@ -896,6 +896,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/fileUploadAndDownload/deleteFile": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExaFileUploadAndDownload"
+                ],
+                "summary": "删除文件",
+                "parameters": [
+                    {
+                        "description": "传入文件里面id即可",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/example.ExaFileUploadAndDownload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除文件",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/fileUploadAndDownload/getFileList": {
             "post": {
                 "security": [

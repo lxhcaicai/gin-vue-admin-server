@@ -1261,6 +1261,32 @@ paths:
       summary: 获取权限列表
       tags:
       - Casbin
+  /fileUploadAndDownload/deleteFile:
+    post:
+      parameters:
+      - description: 传入文件里面id即可
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/example.ExaFileUploadAndDownload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除文件
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除文件
+      tags:
+      - ExaFileUploadAndDownload
   /fileUploadAndDownload/getFileList:
     post:
       consumes:

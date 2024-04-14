@@ -59,3 +59,14 @@ func (l *Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	}
 	return filepath, filename, nil
 }
+
+func (l *Local) DeleteFile(key string) error {
+	p := global.GVA_CONFIG.Local.StorePath + "/" + key
+	if strings.Contains(p, global.GVA_CONFIG.Local.StorePath) {
+		if err := os.Remove(p); err != nil {
+			return errors.New("本地文件删除失败, err:" + err.Error())
+
+		}
+	}
+	return nil
+}

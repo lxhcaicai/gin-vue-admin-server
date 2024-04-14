@@ -71,3 +71,26 @@ func (b *FileUploadAndDownloadApi) GetFileList(c *gin.Context) {
 		PageSize: pageInfo.PageSize,
 	}, "获取成功", c)
 }
+
+// DeleteFile
+// @Tags      ExaFileUploadAndDownload
+// @Summary   删除文件
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Param     data  body      example.ExaFileUploadAndDownload  true  "传入文件里面id即可"
+// @Success   200   {object}  response.Response{msg=string}     "删除文件"
+// @Router    /fileUploadAndDownload/deleteFile [post]
+func (b *FileUploadAndDownloadApi) DeleteFile(c *gin.Context) {
+	var file example.ExaFileUploadAndDownload
+	err := c.ShouldBindJSON(&file)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := fileUploadAndDownloadService.DeleteFile(file); err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
+}

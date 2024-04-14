@@ -14,5 +14,7 @@ func (e *FileUploadAndDownloadRouter) InitFileUploadAndDownloadRouter(Router *gi
 	{
 		FileUploadAndDownloadRouter.POST("upload", exaFileUploadAndDownloadApi.UploadFile)
 		FileUploadAndDownloadRouter.POST("getFileList", exaFileUploadAndDownloadApi.GetFileList)
+		FileUploadAndDownloadRouter.POST("deleteFile", exaFileUploadAndDownloadApi.DeleteFile) // 删除指定文件
+
 	}
 }
