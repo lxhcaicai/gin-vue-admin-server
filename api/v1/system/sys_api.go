@@ -6,6 +6,7 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
+	systemReq "github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/lxhcaicai/gin-vue-admin/server/model/system/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
@@ -177,4 +178,41 @@ func (s *SystemApiApi) GetAllApis(c *gin.Context) {
 		return
 	}
 	response.OkWithDetailed(systemRes.SysAPIListResponse{Apis: apis}, "获取成功", c)
+}
+
+// GetApiList
+// @Tags      SysApi
+// @Summary   分页获取API列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      systemReq.SearchApiParams                               true  "分页获取API列表"
+// @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "分页获取API列表,返回包括列表,总数,页码,每页数量"
+// @Router    /api/getApiList [post]
+func (s *SystemApiApi) GetApiList(c *gin.Context) {
+	var pageInfo systemReq.SearchApiParams
+	err := c.ShouldBindJSON(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(pageInfo.PageInfo, utils.PageInfoVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	list, total, err := apiService.GetAPIInfoList(pageInfo.SysApi, pageInfo.PageInfo, pageInfo.OrderKey, pageInfo.Desc)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+
+	response.OkWithDetailed(response.PageResult{
+		List:     list,
+		Total:    total,
+		Page:     pageInfo.Page,
+		PageSize: pageInfo.PageSize,
+	}, "获取成功", c)
+
 }

@@ -1,6 +1,7 @@
 package system
 
 import (
+	"fmt"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
@@ -98,4 +99,64 @@ func (apiService *ApiService) DeleteApisByIds(ids request.IdsReq) (err error) {
 func (apiService *ApiService) GetAllApis() (apis []system.SysApi, err error) {
 	err = global.GVA_DB.Find(&apis).Error
 	return
+}
+
+// GetAPIInfoList
+//
+//	@Description: 分页获取数据
+func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.PageInfo, order string, desc bool) (list interface{}, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	db := global.GVA_DB.Model(&system.SysApi{})
+	var apiList []system.SysApi
+
+	if api.Path != "" {
+		db = db.Where("path LIKE ?", "%"+api.Path+"%")
+	}
+
+	if api.Description != "" {
+		db = db.Where("description LIKE ?", "%"+api.Description+"%")
+	}
+
+	if api.Method != "" {
+		db = db.Where("method = ?", api.Method)
+	}
+
+	if api.ApiGroup != "" {
+		db = db.Where("api_group = ?", api.ApiGroup)
+	}
+
+	err = db.Count(&total).Error
+
+	if err != nil {
+		return apiList, total, err
+	} else {
+		db = db.Limit(limit).Offset(offset)
+		if order != "" {
+			var OrderStr string
+
+			orderMap := make(map[string]bool, 5)
+			orderMap["id"] = true
+			orderMap["path"] = true
+			orderMap["api_group"] = true
+			orderMap["description"] = true
+			orderMap["method"] = true
+
+			if orderMap[order] {
+				if desc {
+					OrderStr = order + "desc"
+				} else {
+					OrderStr = order
+				}
+			} else {
+				err = fmt.Errorf("非法的排序字段: %v", order)
+				return apiList, total, err
+			}
+			err = db.Order(OrderStr).Find(&apiList).Error
+
+		} else {
+			err = db.Order("api_group").Find(&apiList).Error
+		}
+	}
+	return apiList, total, err
 }
