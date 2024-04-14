@@ -115,6 +115,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/getApiById": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "根据id获取api",
+                "parameters": [
+                    {
+                        "description": "根据id获取api",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GetById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "根据id获取api,返回包括api详情",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.SysAPIResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/authority/copyAuthority": {
             "post": {
                 "security": [
@@ -2328,6 +2378,14 @@ const docTemplate = `{
                 "data": {},
                 "string": {
                     "type": "string"
+                }
+            }
+        },
+        "response.SysAPIResponse": {
+            "type": "object",
+            "properties": {
+                "api": {
+                    "$ref": "#/definitions/system.SysApi"
                 }
             }
         },

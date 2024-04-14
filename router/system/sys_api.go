@@ -14,7 +14,8 @@ func (s *ApiRouter) InitApiRouter(Router *gin.RouterGroup, RouterPub *gin.Router
 
 	apiRouterApi := v1.ApiGroupApp.SystemApiGroup.SystemApiApi
 	{
-		apiRouter.POST("createApi", apiRouterApi.CreateApi) // 创建api
-		apiRouter.POST("deleteApi", apiRouterApi.DeleteApi) // 删除Api
+		apiRouter.POST("createApi", apiRouterApi.CreateApi)   // 创建api
+		apiRouter.POST("deleteApi", apiRouterApi.DeleteApi)   // 删除Api
+		apiRouter.POST("getApiById", apiRouterApi.GetApiById) // 获取单条Api消息
 	}
 }

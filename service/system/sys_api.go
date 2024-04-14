@@ -36,3 +36,11 @@ func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
 	}
 	return nil
 }
+
+// GetApiById
+//
+//	@Description: 根据id获取api
+func (apiService *ApiService) GetApiById(id int) (api system.SysApi, err error) {
+	err = global.GVA_DB.Where("id = ?", id).First(&api).Error
+	return
+}
