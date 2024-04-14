@@ -9,6 +9,7 @@ type ApiGroup struct {
 	JwtApi
 	OperationRecordApi
 	AuthorityApi
+	CasbinApi
 }
 
 var (

@@ -8,4 +8,5 @@ type RouterGroup struct {
 	JwtRouter
 	OperationRecordRouter
 	AuthorityRouter
+	CasbinRouter
 }

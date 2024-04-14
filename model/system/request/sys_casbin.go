@@ -5,6 +5,11 @@ type CasbinInfo struct {
 	Method string `json:"method"` // 方法
 }
 
+type CasbinInReceive struct {
+	AuthorityId uint         `json:"authorityId"`
+	CasbinInfos []CasbinInfo `json:"casbinInfos"`
+}
+
 func DefaultCasbin() []CasbinInfo {
 	return []CasbinInfo{
 		{Path: "/menu/getMenu", Method: "POST"},
