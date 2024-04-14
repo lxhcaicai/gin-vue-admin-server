@@ -21,5 +21,6 @@ func (s *AuthorityRouter) InitAuthorityRouter(Router *gin.RouterGroup) {
 		authorityRouter.POST("deleteAuthority", authorityApi.DeleteAuthority) // 删除角色
 		authorityRouter.POST("updateAuthority", authorityApi.UpdateAuthority)
 		authorityRouter.POST("copyAuthority", authorityApi.CopyAuthority) // 拷贝角色
+		authorityRouter.POST("setDataAuthority", authorityApi.SetDataAuthority)
 	}
 }

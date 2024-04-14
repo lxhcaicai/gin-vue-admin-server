@@ -741,6 +741,34 @@ paths:
       summary: 分页获取角色列表
       tags:
       - Authority
+  /authority/setDataAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 设置角色资源权限
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysAuthority'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 设置角色资源权限
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 设置角色资源权限
+      tags:
+      - Authority
   /authority/updateAuthority:
     post:
       consumes:

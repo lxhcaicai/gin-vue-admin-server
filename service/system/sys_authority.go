@@ -182,3 +182,13 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 	}
 	return copyInfo.Authority, err
 }
+
+// SetDataAuthority
+//
+//	@Description: 设置角色资源权限
+func (authorityService *AuthorityService) SetDataAuthority(auth system.SysAuthority) error {
+	var s system.SysAuthority
+	global.GVA_DB.Preload("DataAuthorityId").First(&s, "authority_id = ?", auth.AuthorityId)
+	err := global.GVA_DB.Model(&s).Association("DataAuthorityId").Replace(&auth.DataAuthorityId)
+	return err
+}
