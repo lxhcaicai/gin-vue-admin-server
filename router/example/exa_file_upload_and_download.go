@@ -13,5 +13,6 @@ func (e *FileUploadAndDownloadRouter) InitFileUploadAndDownloadRouter(Router *gi
 	exaFileUploadAndDownloadApi := v1.ApiGroupApp.ExampleApiGroup.FileUploadAndDownloadApi
 	{
 		FileUploadAndDownloadRouter.POST("upload", exaFileUploadAndDownloadApi.UploadFile)
+		FileUploadAndDownloadRouter.POST("getFileList", exaFileUploadAndDownloadApi.GetFileList)
 	}
 }
