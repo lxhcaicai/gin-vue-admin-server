@@ -135,3 +135,28 @@ func (s *SystemApiApi) UpdateApi(c *gin.Context) {
 	}
 	response.OkWithMessage("修改成功", c)
 }
+
+// DeleteApisByIds
+// @Tags      SysApi
+// @Summary   删除选中Api
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.IdsReq                 true  "ID"
+// @Success   200   {object}  response.Response{msg=string}  "删除选中Api"
+// @Router    /api/deleteApisByIds [delete]
+func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
+	var ids request.IdsReq
+	err := c.ShouldBindJSON(&ids)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = apiService.DeleteApisByIds(ids)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
+}

@@ -733,6 +733,34 @@ paths:
       summary: 删除api
       tags:
       - SysApi
+  /api/deleteApisByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除选中Api
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除选中Api
+      tags:
+      - SysApi
   /api/getApiById:
     post:
       consumes:

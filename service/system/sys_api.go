@@ -2,6 +2,7 @@ package system
 
 import (
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/common/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
@@ -67,6 +68,25 @@ func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
 			return err
 		} else {
 			err = global.GVA_DB.Save(&api).Error
+		}
+	}
+	return err
+}
+
+// DeleteApisByIds
+//
+//	@Description: 删除选中API
+func (apiService *ApiService) DeleteApisByIds(ids request.IdsReq) (err error) {
+	var apis []system.SysApi
+	err = global.GVA_DB.Find(apis, "id in ?", ids.Ids).Delete(&apis).Error
+	if err != nil {
+		return err
+	} else {
+		for _, sysApi := range apis {
+			CasbinServiceApp.ClearCasbin(1, sysApi.Path, sysApi.Method)
+		}
+		if err != nil {
+			return err
 		}
 	}
 	return err
