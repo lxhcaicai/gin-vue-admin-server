@@ -16,3 +16,23 @@ func (apiService *ApiService) CreateApi(api system.SysApi) (err error) {
 	}
 	return global.GVA_DB.Create(&api).Error
 }
+
+// DeleteApi
+//
+//	@Description: 删除基础api
+func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
+	var entity system.SysApi
+	err = global.GVA_DB.Where("id = ?", api.ID).First(&entity).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return err
+	}
+	err = global.GVA_DB.Delete(&entity).Error
+	if err != nil {
+		return err
+	}
+	CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method)
+	if err != nil {
+		return err
+	}
+	return nil
+}

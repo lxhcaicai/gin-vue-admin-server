@@ -700,6 +700,34 @@ paths:
       summary: 创建基础api
       tags:
       - SysApi
+  /api/deleteApi:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysApi'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除api
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除api
+      tags:
+      - SysApi
   /authority/copyAuthority:
     post:
       consumes:

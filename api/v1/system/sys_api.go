@@ -41,3 +41,35 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 	}
 	response.OkWithMessage("创建成功", c)
 }
+
+// DeleteApi
+// @Tags      SysApi
+// @Summary   删除api
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysApi                  true  "ID"
+// @Success   200   {object}  response.Response{msg=string}  "删除api"
+// @Router    /api/deleteApi [post]
+func (s *SystemApiApi) DeleteApi(c *gin.Context) {
+	var api system.SysApi
+	err := c.ShouldBindJSON(&api)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	err = utils.Verify(api.GVA_MODEL, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	err = apiService.DeleteApi(api)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
+}
