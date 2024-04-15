@@ -458,6 +458,11 @@ definitions:
       file:
         $ref: '#/definitions/example.ExaFileUploadAndDownload'
     type: object
+  response.FilePathResponse:
+    properties:
+      filePath:
+        type: string
+    type: object
   response.FileResponse:
     properties:
       file:
@@ -1335,6 +1340,35 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 断点续传到服务器
+      tags:
+      - ExaFileUploadAndDownload
+  /fileUploadAndDownload/breakpointContinueFinish:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 上传文件完成
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建文件,返回包括文件路径
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.FilePathResponse'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 切片传输完成
       tags:
       - ExaFileUploadAndDownload
   /fileUploadAndDownload/deleteFile:

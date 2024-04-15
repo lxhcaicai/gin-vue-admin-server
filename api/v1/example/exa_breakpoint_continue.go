@@ -97,3 +97,24 @@ func (b *FileUploadAndDownloadApi) FindFile(c *gin.Context) {
 		response.OkWithDetailed(exampleRes.FileResponse{File: file}, "查找成功", c)
 	}
 }
+
+// BreakpointContinueFinish
+// @Tags      ExaFileUploadAndDownload
+// @Summary   切片传输完成
+// @Security  ApiKeyAuth
+// @accept    multipart/form-data
+// @Produce   application/json
+// @Param     file  formData  file                                                            true  "上传文件完成"
+// @Success   200   {object}  response.Response{data=exampleRes.FilePathResponse,msg=string}  "创建文件,返回包括文件路径"
+// @Router    /fileUploadAndDownload/breakpointContinueFinish [post]
+func (b *FileUploadAndDownloadApi) BreakpointContinueFinish(c *gin.Context) {
+	fileMd5 := c.Query("fileMd5")
+	fileName := c.Query("fileName")
+	filePath, err := utils.MakeFile(fileName, fileMd5)
+	if err != nil {
+		global.GVA_LOG.Error("文件创建失败", zap.Error(err))
+		response.FailWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "文件创建失败", c)
+	} else {
+		response.OkWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "文件创建成功", c)
+	}
+}

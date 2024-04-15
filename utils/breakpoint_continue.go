@@ -60,3 +60,29 @@ func makeFileContent(content []byte, fileName string, FileDir string, contentNum
 	defer f.Close()
 	return path, nil
 }
+
+// MakeFile
+//
+//	@Description: 创建切片文件
+func MakeFile(fileName string, FileMd5 string) (string, error) {
+	rd, err := os.ReadDir(breakpointDir + FileMd5)
+	if err != nil {
+		return finishDir + fileName, err
+	}
+	_ = os.MkdirAll(finishDir, os.ModePerm)
+	fd, err := os.OpenFile(finishDir+fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o644)
+	if err != nil {
+		return finishDir + fileName, err
+	}
+	defer fd.Close()
+	for k := range rd {
+		content, _ := os.ReadFile(breakpointDir + FileMd5 + "/" + fileName + "_" + strconv.Itoa(k))
+		_, err = fd.Write(content)
+		if err != nil {
+			_ = os.Remove(finishDir + fileName)
+			return finishDir + fileName, err
+		}
+	}
+	return finishDir + fileName, nil
+
+}
