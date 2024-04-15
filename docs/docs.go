@@ -896,6 +896,54 @@ const docTemplate = `{
                 }
             }
         },
+        "/fileUploadAndDownload/breakpointContinue": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExaFileUploadAndDownload"
+                ],
+                "summary": "断点续传到服务器",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "an example for breakpoint resume, 断点续传示例",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "断点续传到服务器",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/fileUploadAndDownload/deleteFile": {
             "post": {
                 "security": [
