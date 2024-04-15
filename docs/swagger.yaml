@@ -209,6 +209,50 @@ definitions:
         description: 栈名
         type: string
     type: object
+  example.ExaFile:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      chunkTotal:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      exaFileChunk:
+        items:
+          $ref: '#/definitions/example.ExaFileChunk'
+        type: array
+      fileMd5:
+        type: string
+      fileName:
+        type: string
+      filePath:
+        type: string
+      isFinish:
+        type: boolean
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  example.ExaFileChunk:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      exaFileID:
+        type: integer
+      fileChunkNumber:
+        type: integer
+      fileChunkPath:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   example.ExaFileUploadAndDownload:
     properties:
       ID:
@@ -413,6 +457,11 @@ definitions:
     properties:
       file:
         $ref: '#/definitions/example.ExaFileUploadAndDownload'
+    type: object
+  response.FileResponse:
+    properties:
+      file:
+        $ref: '#/definitions/example.ExaFile'
     type: object
   response.LoginResponse:
     properties:
@@ -1312,6 +1361,35 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除文件
+      tags:
+      - ExaFileUploadAndDownload
+  /fileUploadAndDownload/findFile:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Find the file, 查找文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 查找文件,返回包括文件详情
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.FileResponse'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 查找文件
       tags:
       - ExaFileUploadAndDownload
   /fileUploadAndDownload/getFileList:

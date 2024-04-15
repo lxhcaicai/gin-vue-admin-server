@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
+	exampleRes "github.com/lxhcaicai/gin-vue-admin/server/model/example/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
 	"io"
@@ -73,4 +74,26 @@ func (b *FileUploadAndDownloadApi) BreakpointContinue(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("切片创建成功", c)
+}
+
+// FindFile
+// @Tags      ExaFileUploadAndDownload
+// @Summary   查找文件
+// @Security  ApiKeyAuth
+// @accept    multipart/form-data
+// @Produce   application/json
+// @Param     file  formData  file                                                        true  "Find the file, 查找文件"
+// @Success   200   {object}  response.Response{data=exampleRes.FileResponse,msg=string}  "查找文件,返回包括文件详情"
+// @Router    /fileUploadAndDownload/findFile [post]
+func (b *FileUploadAndDownloadApi) FindFile(c *gin.Context) {
+	fileMd5 := c.Query("fileMd5")
+	fileName := c.Query("fileName")
+	chunkTotal, _ := strconv.Atoi(c.Query("chunkTotal"))
+	file, err := fileUploadAndDownloadService.FindOrCreateFile(fileMd5, fileName, chunkTotal)
+	if err != nil {
+		global.GVA_LOG.Error("查找失败!", zap.Error(err))
+		response.FailWithMessage("查找失败", c)
+	} else {
+		response.OkWithDetailed(exampleRes.FileResponse{File: file}, "查找成功", c)
+	}
 }

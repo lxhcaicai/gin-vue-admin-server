@@ -991,6 +991,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/fileUploadAndDownload/findFile": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExaFileUploadAndDownload"
+                ],
+                "summary": "查找文件",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Find the file, 查找文件",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查找文件,返回包括文件详情",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.FileResponse"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/fileUploadAndDownload/getFileList": {
             "post": {
                 "security": [
@@ -2580,6 +2631,70 @@ const docTemplate = `{
                 }
             }
         },
+        "example.ExaFile": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "chunkTotal": {
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "exaFileChunk": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/example.ExaFileChunk"
+                    }
+                },
+                "fileMd5": {
+                    "type": "string"
+                },
+                "fileName": {
+                    "type": "string"
+                },
+                "filePath": {
+                    "type": "string"
+                },
+                "isFinish": {
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "example.ExaFileChunk": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "exaFileID": {
+                    "type": "integer"
+                },
+                "fileChunkNumber": {
+                    "type": "integer"
+                },
+                "fileChunkPath": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
         "example.ExaFileUploadAndDownload": {
             "type": "object",
             "properties": {
@@ -2868,6 +2983,14 @@ const docTemplate = `{
             "properties": {
                 "file": {
                     "$ref": "#/definitions/example.ExaFileUploadAndDownload"
+                }
+            }
+        },
+        "response.FileResponse": {
+            "type": "object",
+            "properties": {
+                "file": {
+                    "$ref": "#/definitions/example.ExaFile"
                 }
             }
         },
