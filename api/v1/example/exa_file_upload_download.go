@@ -94,3 +94,20 @@ func (b *FileUploadAndDownloadApi) DeleteFile(c *gin.Context) {
 	}
 	response.OkWithMessage("删除成功", c)
 }
+
+// EditFileName 编辑文件名或者备注
+func (b *FileUploadAndDownloadApi) EditFileName(c *gin.Context) {
+	var file example.ExaFileUploadAndDownload
+	err := c.ShouldBindJSON(&file)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = fileUploadAndDownloadService.EditFileName(file)
+	if err != nil {
+		global.GVA_LOG.Error("编辑失败!", zap.Error(err))
+		response.FailWithMessage("编辑失败", c)
+		return
+	}
+	response.OkWithMessage("编辑成功", c)
+}
