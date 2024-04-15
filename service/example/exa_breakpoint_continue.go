@@ -40,3 +40,20 @@ func (e *FileUploadAndDownloadService) CreateFileChunk(id uint, fileChunkPath st
 	err := global.GVA_DB.Create(&chunk).Error
 	return err
 }
+
+// DeleteFileChunk
+//
+//	@Description: 删除文件切片记录
+func (e *FileUploadAndDownloadService) DeleteFileChunk(fileMd5 string, filePath string) error {
+	var chunks []example.ExaFileChunk
+	var file example.ExaFile
+	err := global.GVA_DB.Where("file_md5 = ? ", fileMd5).First(&file).Updates(map[string]interface{}{
+		"IsFinish":  true,
+		"file_path": filePath,
+	}).Error
+	if err != nil {
+		return err
+	}
+	err = global.GVA_DB.Where("exa_file_id = ?", file.ID).Delete(&chunks).Unscoped().Error
+	return err
+}

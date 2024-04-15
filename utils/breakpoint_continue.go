@@ -86,3 +86,11 @@ func MakeFile(fileName string, FileMd5 string) (string, error) {
 	return finishDir + fileName, nil
 
 }
+
+// RemoveChunk
+//
+//	@Description: 移除切片
+func RemoveChunk(FileMd5 string) error {
+	err := os.RemoveAll(breakpointDir + FileMd5)
+	return err
+}

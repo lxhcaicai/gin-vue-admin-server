@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/example"
 	exampleRes "github.com/lxhcaicai/gin-vue-admin/server/model/example/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
@@ -117,4 +118,34 @@ func (b *FileUploadAndDownloadApi) BreakpointContinueFinish(c *gin.Context) {
 	} else {
 		response.OkWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "文件创建成功", c)
 	}
+}
+
+// RemoveChunk
+// @Tags      ExaFileUploadAndDownload
+// @Summary   删除切片
+// @Security  ApiKeyAuth
+// @accept    multipart/form-data
+// @Produce   application/json
+// @Param     file  formData  file                           true  "删除缓存切片"
+// @Success   200   {object}  response.Response{msg=string}  "删除切片"
+// @Router    /fileUploadAndDownload/removeChunk [post]
+func (b *FileUploadAndDownloadApi) RemoveChunk(c *gin.Context) {
+	var file example.ExaFile
+	err := c.ShouldBindQuery(&file)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.RemoveChunk(file.FileMd5)
+	if err != nil {
+		global.GVA_LOG.Error("缓存切片删除失败", zap.Error(err))
+		return
+	}
+	err = fileUploadAndDownloadService.DeleteFileChunk(file.FileMd5, file.FilePath)
+	if err != nil {
+		global.GVA_LOG.Error(err.Error(), zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithMessage("缓存切片删除成功", c)
 }
