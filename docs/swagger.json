@@ -1742,6 +1742,99 @@
                 }
             }
         },
+        "/sysDictionaryDetail/findSysDictionaryDetail": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionaryDetail"
+                ],
+                "summary": "用id查询SysDictionaryDetail",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "扩展值",
+                        "name": "extend",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "展示值",
+                        "name": "label",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "排序标记",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "启用状态",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "字典值",
+                        "name": "value",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "用id查询SysDictionaryDetail",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/sysDictionaryDetail/updateSysDictionaryDetail": {
             "put": {
                 "security": [

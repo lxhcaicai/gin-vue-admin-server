@@ -31,3 +31,11 @@ func (dictionaryDetailService *DictionaryDetailService) UpdateSysDictionaryDetai
 	err = global.GVA_DB.Save(sysDictionaryDetail).Error
 	return err
 }
+
+// GetSysDictionaryDetail
+//
+//	@Description: 根据id获取字典详情单条数据
+func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetail(id uint) (sysDictionaryDetail system.SysDictionaryDetail, err error) {
+	err = global.GVA_DB.Where("id = ?", id).First(&sysDictionaryDetail).Error
+	return
+}

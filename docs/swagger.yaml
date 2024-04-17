@@ -1862,6 +1862,63 @@ paths:
       summary: 删除SysDictionaryDetail
       tags:
       - SysDictionaryDetail
+  /sysDictionaryDetail/findSysDictionaryDetail:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 扩展值
+        in: query
+        name: extend
+        type: string
+      - description: 展示值
+        in: query
+        name: label
+        type: string
+      - description: 排序标记
+        in: query
+        name: sort
+        type: integer
+      - description: 启用状态
+        in: query
+        name: status
+        type: boolean
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - description: 字典值
+        in: query
+        name: value
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 用id查询SysDictionaryDetail
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询SysDictionaryDetail
+      tags:
+      - SysDictionaryDetail
   /sysDictionaryDetail/updateSysDictionaryDetail:
     put:
       consumes:

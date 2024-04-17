@@ -5,6 +5,7 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
+	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
 )
 
@@ -84,4 +85,34 @@ func (d *DictionaryDetailApi) UpdateSysDictionaryDetail(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("更新成功", c)
+}
+
+// FindSysDictionaryDetail
+// @Tags      SysDictionaryDetail
+// @Summary   用id查询SysDictionaryDetail
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  query     system.SysDictionaryDetail                                 true  "用id查询SysDictionaryDetail"
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "用id查询SysDictionaryDetail"
+// @Router    /sysDictionaryDetail/findSysDictionaryDetail [get]
+func (d *DictionaryDetailApi) FindSysDictionaryDetail(c *gin.Context) {
+	var detail system.SysDictionaryDetail
+	err := c.ShouldBindQuery(&detail)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(detail, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	reSysDictionaryDetail, err := dictionaryDetailService.GetSysDictionaryDetail(detail.ID)
+	if err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		response.FailWithMessage("查询失败", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"reSysDictionaryDetail": reSysDictionaryDetail}, "查询成功", c)
 }
