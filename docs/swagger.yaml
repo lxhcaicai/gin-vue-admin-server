@@ -1862,6 +1862,34 @@ paths:
       summary: 删除SysDictionaryDetail
       tags:
       - SysDictionaryDetail
+  /sysDictionaryDetail/updateSysDictionaryDetail:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新SysDictionaryDetail
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysDictionaryDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新SysDictionaryDetail
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 更新SysDictionaryDetail
+      tags:
+      - SysDictionaryDetail
   /sysOperationRecord/createSysOperationRecord:
     post:
       consumes:

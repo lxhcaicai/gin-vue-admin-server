@@ -23,3 +23,11 @@ func (dictionaryDetailService *DictionaryDetailService) DeleteSysDictionaryDetai
 	err = global.GVA_DB.Delete(&syssysDictionaryDetail).Error
 	return err
 }
+
+// UpdateSysDictionaryDetail
+//
+//	@Description: 更新字典详情数据
+func (dictionaryDetailService *DictionaryDetailService) UpdateSysDictionaryDetail(sysDictionaryDetail *system.SysDictionaryDetail) (err error) {
+	err = global.GVA_DB.Save(sysDictionaryDetail).Error
+	return err
+}
