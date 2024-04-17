@@ -885,6 +885,56 @@
                 }
             }
         },
+        "/customer/customer": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExaCustomer"
+                ],
+                "summary": "创建客户",
+                "parameters": [
+                    {
+                        "description": "客户用户名, 客户手机号码",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/example.ExaCustomer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "创建客户",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/fileUploadAndDownload/breakpointContinue": {
             "post": {
                 "security": [
@@ -2715,6 +2765,47 @@
                 },
                 "stacktrace-key": {
                     "description": "栈名",
+                    "type": "string"
+                }
+            }
+        },
+        "example.ExaCustomer": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "customerName": {
+                    "description": "客户名",
+                    "type": "string"
+                },
+                "customerPhoneData": {
+                    "description": "客户手机号",
+                    "type": "string"
+                },
+                "sysUser": {
+                    "description": "管理详情",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/system.SysUser"
+                        }
+                    ]
+                },
+                "sysUserAuthorityID": {
+                    "description": "管理角色ID",
+                    "type": "integer"
+                },
+                "sysUserId": {
+                    "description": "管理ID",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }

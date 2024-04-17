@@ -48,6 +48,7 @@ func Routers() *gin.Engine {
 		systemRouter.InitApiRouter(PrivateGroup, PublicGroup)
 
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup)
+		exampleRouter.InitCustomerRouter(PrivateGroup) // 客户路由
 	}
 	global.GVA_LOG.Info("router register success")
 	return Router
