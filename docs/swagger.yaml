@@ -1834,6 +1834,34 @@ paths:
       summary: 创建SysDictionaryDetail
       tags:
       - SysDictionaryDetail
+  /sysDictionaryDetail/deleteSysDictionaryDetail:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: SysDictionaryDetail模型
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysDictionaryDetail'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除SysDictionaryDetail
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除SysDictionaryDetail
+      tags:
+      - SysDictionaryDetail
   /sysOperationRecord/createSysOperationRecord:
     post:
       consumes:

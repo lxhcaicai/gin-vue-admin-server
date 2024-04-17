@@ -35,3 +35,28 @@ func (d *DictionaryDetailApi) CreateSysDictionaryDetail(c *gin.Context) {
 	}
 	response.OkWithMessage("创建成功", c)
 }
+
+// DeleteSysDictionaryDetail
+// @Tags      SysDictionaryDetail
+// @Summary   删除SysDictionaryDetail
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysDictionaryDetail     true  "SysDictionaryDetail模型"
+// @Success   200   {object}  response.Response{msg=string}  "删除SysDictionaryDetail"
+// @Router    /sysDictionaryDetail/deleteSysDictionaryDetail [delete]
+func (d DictionaryDetailApi) DeleteSysDictionaryDetail(c *gin.Context) {
+	var detail system.SysDictionaryDetail
+	err := c.ShouldBindJSON(&detail)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = dictionaryDetailService.DeleteSysDictionaryDetail(detail)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
+}
