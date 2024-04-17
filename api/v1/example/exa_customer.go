@@ -5,6 +5,7 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/example"
+	exampleRes "github.com/lxhcaicai/gin-vue-admin/server/model/example/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
 )
@@ -106,4 +107,34 @@ func (e *CustomerApi) DeleteExaCustomer(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("删除成功", c)
+}
+
+// GetExaCustomer
+// @Tags      ExaCustomer
+// @Summary   获取单一客户信息
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  query     example.ExaCustomer                                                true  "客户ID"
+// @Success   200   {object}  response.Response{data=exampleRes.ExaCustomerResponse,msg=string}  "获取单一客户信息,返回包括客户详情"
+// @Router    /customer/customer [get]
+func (e *CustomerApi) GetExaCustomer(c *gin.Context) {
+	var customer example.ExaCustomer
+	err := c.ShouldBindQuery(&customer)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(customer.GVA_MODEL, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	data, err := customerService.GetExaCustomer(customer.ID)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(exampleRes.ExaCustomerResponse{Customer: data}, "获取成功", c)
 }

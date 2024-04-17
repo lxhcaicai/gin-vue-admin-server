@@ -886,6 +886,90 @@
             }
         },
         "/customer/customer": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExaCustomer"
+                ],
+                "summary": "获取单一客户信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "客户名",
+                        "name": "customerName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "客户手机号",
+                        "name": "customerPhoneData",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "管理角色ID",
+                        "name": "sysUserAuthorityID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "管理ID",
+                        "name": "sysUserId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取单一客户信息,返回包括客户详情",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.ExaCustomerResponse"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
             "put": {
                 "security": [
                     {
@@ -3250,6 +3334,14 @@
                 },
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "response.ExaCustomerResponse": {
+            "type": "object",
+            "properties": {
+                "customer": {
+                    "$ref": "#/definitions/example.ExaCustomer"
                 }
             }
         },

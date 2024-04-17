@@ -481,6 +481,11 @@ definitions:
       id:
         type: integer
     type: object
+  response.ExaCustomerResponse:
+    properties:
+      customer:
+        $ref: '#/definitions/example.ExaCustomer'
+    type: object
   response.ExaFileResponse:
     properties:
       file:
@@ -1369,6 +1374,57 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除客户
+      tags:
+      - ExaCustomer
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 客户名
+        in: query
+        name: customerName
+        type: string
+      - description: 客户手机号
+        in: query
+        name: customerPhoneData
+        type: string
+      - description: 管理角色ID
+        in: query
+        name: sysUserAuthorityID
+        type: integer
+      - description: 管理ID
+        in: query
+        name: sysUserId
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取单一客户信息,返回包括客户详情
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.ExaCustomerResponse'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取单一客户信息
       tags:
       - ExaCustomer
     post:

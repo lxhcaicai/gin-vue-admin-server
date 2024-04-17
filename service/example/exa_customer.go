@@ -31,3 +31,11 @@ func (exa *CustomerService) DeleteExaCustomer(e example.ExaCustomer) (err error)
 	err = global.GVA_DB.Delete(&e).Error
 	return err
 }
+
+// GetExaCustomer
+//
+//	@Description: 获取客户信息
+func (exa *CustomerService) GetExaCustomer(id uint) (customer example.ExaCustomer, err error) {
+	err = global.GVA_DB.Where("id = ?", id).First(&customer).Error
+	return
+}
