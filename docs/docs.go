@@ -1653,6 +1653,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/sysDictionaryDetail/createSysDictionaryDetail": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionaryDetail"
+                ],
+                "summary": "创建SysDictionaryDetail",
+                "parameters": [
+                    {
+                        "description": "SysDictionaryDetail模型",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysDictionaryDetail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "创建SysDictionaryDetail",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/sysOperationRecord/createSysOperationRecord": {
             "post": {
                 "security": [
@@ -3803,6 +3853,43 @@ const docTemplate = `{
                 },
                 "value": {
                     "description": "地址栏携带参数的值",
+                    "type": "string"
+                }
+            }
+        },
+        "system.SysDictionaryDetail": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "extend": {
+                    "description": "扩展值",
+                    "type": "string"
+                },
+                "label": {
+                    "description": "展示值",
+                    "type": "string"
+                },
+                "sort": {
+                    "description": "排序标记",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "启用状态",
+                    "type": "boolean"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "value": {
+                    "description": "字典值",
                     "type": "string"
                 }
             }

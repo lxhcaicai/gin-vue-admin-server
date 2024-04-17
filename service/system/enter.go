@@ -9,4 +9,5 @@ type ServiceGroup struct {
 	SystemConfigService
 	AuthorityService
 	ApiService
+	DictionaryDetailService
 }
