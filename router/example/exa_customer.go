@@ -13,8 +13,8 @@ func (e *CustomerRouter) InitCustomerRouter(Router *gin.RouterGroup) {
 	customerRouter := Router.Group("customer").Use(middleware.OperationRecord())
 	exaCustomerApi := v1.ApiGroupApp.ExampleApiGroup.CustomerApi
 	{
-		customerRouter.POST("customer", exaCustomerApi.CreateExaCustomer) // 创建客户
-		customerRouter.PUT("customer", exaCustomerApi.UpdateExaCustomer)  // 更新客户
-
+		customerRouter.POST("customer", exaCustomerApi.CreateExaCustomer)   // 创建客户
+		customerRouter.PUT("customer", exaCustomerApi.UpdateExaCustomer)    // 更新客户
+		customerRouter.DELETE("customer", exaCustomerApi.DeleteExaCustomer) // 删除客户
 	}
 }

@@ -78,3 +78,32 @@ func (e *CustomerApi) UpdateExaCustomer(c *gin.Context) {
 	}
 	response.OkWithMessage("更新成功", c)
 }
+
+// DeleteExaCustomer
+// @Tags      ExaCustomer
+// @Summary   删除客户
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      example.ExaCustomer            true  "客户ID"
+// @Success   200   {object}  response.Response{msg=string}  "删除客户"
+// @Router    /customer/customer [delete]
+func (e *CustomerApi) DeleteExaCustomer(c *gin.Context) {
+	var customer example.ExaCustomer
+	err := c.ShouldBindJSON(&customer)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = customerService.DeleteExaCustomer(customer)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
+}

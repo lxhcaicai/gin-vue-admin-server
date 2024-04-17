@@ -23,3 +23,11 @@ func (exa *CustomerService) UpdateExaCustomer(e *example.ExaCustomer) (err error
 	err = global.GVA_DB.Save(e).Error
 	return err
 }
+
+// DeleteExaCustomer
+//
+//	@Description: 删除客户
+func (exa *CustomerService) DeleteExaCustomer(e example.ExaCustomer) (err error) {
+	err = global.GVA_DB.Delete(&e).Error
+	return err
+}
