@@ -886,6 +886,54 @@
             }
         },
         "/customer/customer": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ExaCustomer"
+                ],
+                "summary": "更新客户信息",
+                "parameters": [
+                    {
+                        "description": "客户ID, 客户信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/example.ExaCustomer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新客户信息",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {

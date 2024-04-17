@@ -1371,6 +1371,33 @@ paths:
       summary: 创建客户
       tags:
       - ExaCustomer
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 客户ID, 客户信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/example.ExaCustomer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新客户信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 更新客户信息
+      tags:
+      - ExaCustomer
   /fileUploadAndDownload/breakpointContinue:
     post:
       consumes:

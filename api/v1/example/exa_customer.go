@@ -43,3 +43,38 @@ func (e *CustomerApi) CreateExaCustomer(c *gin.Context) {
 	}
 	response.OkWithMessage("创建成功", c)
 }
+
+// UpdateExaCustomer
+// @Tags      ExaCustomer
+// @Summary   更新客户信息
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      example.ExaCustomer            true  "客户ID, 客户信息"
+// @Success   200   {object}  response.Response{msg=string}  "更新客户信息"
+// @Router    /customer/customer [put]
+func (e *CustomerApi) UpdateExaCustomer(c *gin.Context) {
+	var customer example.ExaCustomer
+	err := c.ShouldBindJSON(&customer)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	err = utils.Verify(customer.GVA_MODEL, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = customerService.UpdateExaCustomer(&customer)
+	if err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败", c)
+		return
+	}
+	response.OkWithMessage("更新成功", c)
+}

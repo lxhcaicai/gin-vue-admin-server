@@ -14,5 +14,7 @@ func (e *CustomerRouter) InitCustomerRouter(Router *gin.RouterGroup) {
 	exaCustomerApi := v1.ApiGroupApp.ExampleApiGroup.CustomerApi
 	{
 		customerRouter.POST("customer", exaCustomerApi.CreateExaCustomer) // 创建客户
+		customerRouter.PUT("customer", exaCustomerApi.UpdateExaCustomer)  // 更新客户
+
 	}
 }

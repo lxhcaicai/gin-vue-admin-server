@@ -15,3 +15,11 @@ func (exa *CustomerService) CreateExaCustomer(e example.ExaCustomer) (err error)
 	err = global.GVA_DB.Create(&e).Error
 	return err
 }
+
+// UpdateExaCustomer
+//
+//	@Description: 更新客户
+func (exa *CustomerService) UpdateExaCustomer(e *example.ExaCustomer) (err error) {
+	err = global.GVA_DB.Save(e).Error
+	return err
+}
