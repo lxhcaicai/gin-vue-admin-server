@@ -16,6 +16,8 @@ var ErrRoleExistence = errors.New("存在相同角色id")
 type AuthorityService struct {
 }
 
+var AuthorityServiceApp = new(AuthorityService)
+
 func (authorityService *AuthorityService) GetAuthorityInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -191,4 +193,12 @@ func (authorityService *AuthorityService) SetDataAuthority(auth system.SysAuthor
 	global.GVA_DB.Preload("DataAuthorityId").First(&s, "authority_id = ?", auth.AuthorityId)
 	err := global.GVA_DB.Model(&s).Association("DataAuthorityId").Replace(&auth.DataAuthorityId)
 	return err
+}
+
+// GetAuthorityInfo
+//
+//	@Description: 获取所有角色信息
+func (authorityService *AuthorityService) GetAuthorityInfo(auth system.SysAuthority) (sa system.SysAuthority, err error) {
+	err = global.GVA_DB.Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(&sa).Error
+	return sa, err
 }
