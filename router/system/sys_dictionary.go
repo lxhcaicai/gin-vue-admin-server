@@ -14,5 +14,6 @@ func (s *DictionaryDetailRouter) InitSysDictionaryRouter(Router *gin.RouterGroup
 	sysDictionaryApi := v1.ApiGroupApp.SystemApiGroup.DictionaryApi
 	{
 		sysDictionaryRouter.POST("createSysDictionary", sysDictionaryApi.CreateSysDictionary)
+		sysDictionaryRouter.DELETE("deleteSysDictionary", sysDictionaryApi.DeleteSysDictionary) // 删除SysDictionary
 	}
 }
