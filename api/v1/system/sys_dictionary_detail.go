@@ -5,6 +5,7 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
 )
@@ -115,4 +116,34 @@ func (d *DictionaryDetailApi) FindSysDictionaryDetail(c *gin.Context) {
 		return
 	}
 	response.OkWithDetailed(gin.H{"reSysDictionaryDetail": reSysDictionaryDetail}, "查询成功", c)
+}
+
+// GetSysDictionaryDetailList
+// @Tags      SysDictionaryDetail
+// @Summary   分页获取SysDictionaryDetail列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  query     request.SysDictionaryDetailSearch                       true  "页码, 每页大小, 搜索条件"
+// @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "分页获取SysDictionaryDetail列表,返回包括列表,总数,页码,每页数量"
+// @Router    /sysDictionaryDetail/getSysDictionaryDetailList [get]
+func (d *DictionaryDetailApi) GetSysDictionaryDetailList(c *gin.Context) {
+	var pageInfo request.SysDictionaryDetailSearch
+	err := c.ShouldBindJSON(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	list, total, err := dictionaryDetailService.GetSysDictionaryDetailInfoList(pageInfo)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(response.PageResult{
+		List:     list,
+		Total:    total,
+		Page:     pageInfo.Page,
+		PageSize: pageInfo.PageSize,
+	}, "获取成功", c)
 }
