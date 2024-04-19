@@ -750,6 +750,34 @@ definitions:
         description: 地址栏携带参数的值
         type: string
     type: object
+  system.SysDictionary:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      desc:
+        description: 描述
+        type: string
+      name:
+        description: 字典名（中）
+        type: string
+      status:
+        description: 状态
+        type: boolean
+      sysDictionaryDetails:
+        items:
+          $ref: '#/definitions/system.SysDictionaryDetail'
+        type: array
+      type:
+        description: 字典名（英）
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   system.SysDictionaryDetail:
     properties:
       ID:
@@ -1809,6 +1837,34 @@ paths:
       summary: jwt加入黑名单
       tags:
       - Jwt
+  /sysDictionary/createSysDictionary:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: SysDictionary模型
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysDictionary'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建SysDictionary
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 创建SysDictionary
+      tags:
+      - SysDictionary
   /sysDictionaryDetail/createSysDictionaryDetail:
     post:
       consumes:

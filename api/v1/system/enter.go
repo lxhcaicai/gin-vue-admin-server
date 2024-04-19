@@ -12,6 +12,7 @@ type ApiGroup struct {
 	CasbinApi
 	SystemApiApi
 	DictionaryDetailApi
+	DictionaryApi
 }
 
 var (
@@ -24,4 +25,5 @@ var (
 	casbinService           = service.ServiceGroupApp.SystemServiceGroup.CasbinService
 	apiService              = service.ServiceGroupApp.SystemServiceGroup.ApiService
 	dictionaryDetailService = service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
+	dictionaryService       = service.ServiceGroupApp.SystemServiceGroup.DictionaryService
 )

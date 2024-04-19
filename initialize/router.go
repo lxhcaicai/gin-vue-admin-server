@@ -46,6 +46,7 @@ func Routers() *gin.Engine {
 		systemRouter.InitAuthorityRouter(PrivateGroup)              // 注册角色路由
 		systemRouter.InitCasbinRouter(PrivateGroup)                 // 权限相关路由
 		systemRouter.InitApiRouter(PrivateGroup, PublicGroup)       // 注册功能api路由
+		systemRouter.InitSysDictionaryRouter(PrivateGroup)          // 字典管理
 		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup)    // 字典详情管理
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup) // 文件上传下载功能路由
 		exampleRouter.InitCustomerRouter(PrivateGroup)              // 客户路由
