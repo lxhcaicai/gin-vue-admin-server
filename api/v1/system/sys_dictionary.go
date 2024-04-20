@@ -86,3 +86,28 @@ func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
 	response.OkWithMessage("更新成功", c)
 
 }
+
+// FindSysDictionary
+// @Tags      SysDictionary
+// @Summary   用id查询SysDictionary
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  query     system.SysDictionary                                       true  "ID或字典英名"
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "用id查询SysDictionary"
+// @Router    /sysDictionary/findSysDictionary [get]
+func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
+	var dictionary system.SysDictionary
+	err := c.ShouldBindJSON(&dictionary)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	sysDictionary, err := dictionaryService.GetSysDictionary(dictionary.Type, dictionary.ID, dictionary.Status)
+	if err != nil {
+		global.GVA_LOG.Error("字典未创建或未开启!", zap.Error(err))
+		response.FailWithMessage("字典未创建或未开启", c)
+		return
+	}
+	response.OkWithDetailed(gin.H{"resysDictionary": sysDictionary}, "查询成功", c)
+}

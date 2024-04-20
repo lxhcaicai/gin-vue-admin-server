@@ -65,3 +65,19 @@ func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *s
 	err = db.Updates(sysDictionaryMap).Error
 	return err
 }
+
+// GetSysDictionary
+//
+//	@Description: 根据id或者type获取字典单条数据
+func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uint, status *bool) (sysDictionary system.SysDictionary, err error) {
+	var flag = false
+	if status == nil {
+		flag = true
+	} else {
+		flag = *status
+	}
+	err = global.GVA_DB.Where("(type = ? OR id = ?) and status = ?", Type, Id, flag).Preload("SysDictionaryDetails", func(db *gorm.DB) *gorm.DB {
+		return db.Where("status = ?", true).Order("sort")
+	}).First(&sysDictionary).Error
+	return
+}
