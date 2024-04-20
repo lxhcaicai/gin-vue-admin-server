@@ -1753,6 +1753,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/sysDictionary/updateSysDictionary": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionary"
+                ],
+                "summary": "更新SysDictionary",
+                "parameters": [
+                    {
+                        "description": "SysDictionary模型",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysDictionary"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "更新SysDictionary",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/sysDictionaryDetail/createSysDictionaryDetail": {
             "post": {
                 "security": [

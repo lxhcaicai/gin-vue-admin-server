@@ -60,3 +60,29 @@ func (s *DictionaryApi) DeleteSysDictionary(c *gin.Context) {
 	}
 	response.OkWithMessage("删除成功", c)
 }
+
+// UpdateSysDictionary
+// @Tags      SysDictionary
+// @Summary   更新SysDictionary
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysDictionary           true  "SysDictionary模型"
+// @Success   200   {object}  response.Response{msg=string}  "更新SysDictionary"
+// @Router    /sysDictionary/updateSysDictionary [put]
+func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
+	var dictionary system.SysDictionary
+	err := c.ShouldBindJSON(&dictionary)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = dictionaryService.UpdateSysDictionary(&dictionary)
+	if err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败", c)
+		return
+	}
+	response.OkWithMessage("更新成功", c)
+
+}

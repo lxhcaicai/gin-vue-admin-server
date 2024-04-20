@@ -42,3 +42,26 @@ func (dictionaryService *DictionaryService) DeleteSysDictionary(sysDictionary sy
 	}
 	return
 }
+
+// @author: [piexlmax](https://github.com/piexlmax)
+// @function: UpdateSysDictionary
+// @description: 更新字典数据
+// @param: sysDictionary *model.SysDictionary
+// @return: err error
+func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *system.SysDictionary) (err error) {
+	var dict system.SysDictionary
+	sysDictionaryMap := map[string]interface{}{
+		"Name":   sysDictionary.Name,
+		"Type":   sysDictionary.Type,
+		"Status": sysDictionary.Status,
+		"Desc":   sysDictionary.Desc,
+	}
+	db := global.GVA_DB.Where("id = ?", sysDictionary.ID).First(&dict)
+	if dict.Type != sysDictionary.Type {
+		if !errors.Is(global.GVA_DB.First(&system.SysDictionary{}, "type = ?", sysDictionary.Type).Error, gorm.ErrRecordNotFound) {
+			return errors.New("存在相同的type，不允许创建")
+		}
+	}
+	err = db.Updates(sysDictionaryMap).Error
+	return err
+}

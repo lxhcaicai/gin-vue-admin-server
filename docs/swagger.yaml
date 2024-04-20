@@ -1893,6 +1893,34 @@ paths:
       summary: 删除SysDictionary
       tags:
       - SysDictionary
+  /sysDictionary/updateSysDictionary:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: SysDictionary模型
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysDictionary'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 更新SysDictionary
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 更新SysDictionary
+      tags:
+      - SysDictionary
   /sysDictionaryDetail/createSysDictionaryDetail:
     post:
       consumes:
