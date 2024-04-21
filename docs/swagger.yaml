@@ -481,6 +481,17 @@ definitions:
       id:
         type: integer
     type: object
+  request.SysAuthorityBtnReq:
+    properties:
+      authorityId:
+        type: integer
+      menuID:
+        type: integer
+      selected:
+        items:
+          type: integer
+        type: array
+    type: object
   response.ExaCustomerResponse:
     properties:
       customer:
@@ -546,6 +557,13 @@ definitions:
     properties:
       api:
         $ref: '#/definitions/system.SysApi'
+    type: object
+  response.SysAuthorityBtnRes:
+    properties:
+      selected:
+        items:
+          type: integer
+        type: array
     type: object
   response.SysAuthorityCopyResponse:
     properties:
@@ -1299,6 +1317,36 @@ paths:
       summary: 更新角色信息
       tags:
       - Authority
+  /authorityBtn/getAuthorityBtn:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 菜单id, 角色id, 选中的按钮id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SysAuthorityBtnReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回列表成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.SysAuthorityBtnRes'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取权限按钮
+      tags:
+      - AuthorityBtn
   /base/captcha:
     post:
       consumes:

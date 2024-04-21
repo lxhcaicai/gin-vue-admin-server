@@ -706,6 +706,59 @@ const docTemplate = `{
                 }
             }
         },
+        "/authorityBtn/getAuthorityBtn": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AuthorityBtn"
+                ],
+                "summary": "获取权限按钮",
+                "parameters": [
+                    {
+                        "description": "菜单id, 角色id, 选中的按钮id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SysAuthorityBtnReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回列表成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.SysAuthorityBtnRes"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/base/captcha": {
             "post": {
                 "security": [
@@ -4054,6 +4107,23 @@ const docTemplate = `{
                 }
             }
         },
+        "request.SysAuthorityBtnReq": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "integer"
+                },
+                "menuID": {
+                    "type": "integer"
+                },
+                "selected": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
         "response.ExaCustomerResponse": {
             "type": "object",
             "properties": {
@@ -4154,6 +4224,17 @@ const docTemplate = `{
             "properties": {
                 "api": {
                     "$ref": "#/definitions/system.SysApi"
+                }
+            }
+        },
+        "response.SysAuthorityBtnRes": {
+            "type": "object",
+            "properties": {
+                "selected": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },
