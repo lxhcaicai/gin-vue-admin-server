@@ -5,6 +5,7 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
+	systemReq "github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
 )
@@ -45,4 +46,32 @@ func (a *AuthorityMenuApi) AddBaseMenu(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("添加成功", c)
+}
+
+// AddMenuAuthority
+// @Tags      AuthorityMenu
+// @Summary   增加menu和角色关联关系
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      systemReq.AddMenuAuthorityInfo  true  "角色ID"
+// @Success   200   {object}  response.Response{msg=string}   "增加menu和角色关联关系"
+// @Router    /menu/addMenuAuthority [post]
+func (a *AuthorityMenuApi) AddMenuAuthority(c *gin.Context) {
+	var authorityMenu systemReq.AddMenuAuthorityInfo
+	err := c.ShouldBindJSON(&authorityMenu)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := utils.Verify(authorityMenu, utils.AuthorityVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := menuService.AddMenuAuthority(authorityMenu.Menus, authorityMenu.AuthorityId); err != nil {
+		global.GVA_LOG.Error("添加失败!", zap.Error(err))
+		response.FailWithMessage("添加失败", c)
+	} else {
+		response.OkWithMessage("添加成功", c)
+	}
 }

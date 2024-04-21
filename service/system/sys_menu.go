@@ -69,3 +69,14 @@ func (menuService *MenuService) AddBaseMenu(menu system.SysBaseMenu) error {
 	}
 	return global.GVA_DB.Create(&menu).Error
 }
+
+// AddMenuAuthority
+//
+//	@Description: 为角色增加menu树
+func (menuService *MenuService) AddMenuAuthority(menus []system.SysBaseMenu, authorityId uint) (err error) {
+	var auth system.SysAuthority
+	auth.AuthorityId = authorityId
+	auth.SysBaseMenus = menus
+	err = AuthorityServiceApp.SetMenuAuthority(&auth)
+	return err
+}

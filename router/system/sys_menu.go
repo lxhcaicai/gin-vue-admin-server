@@ -14,6 +14,7 @@ func (m *MenuRouter) InitMenuRouter(Router *gin.RouterGroup) {
 	authorityMenuApi := v1.ApiGroupApp.SystemApiGroup.AuthorityMenuApi
 	{
 		menuRouter.POST("addBaseMenu", authorityMenuApi.AddBaseMenu)
+		menuRouter.POST("addMenuAuthority", authorityMenuApi.AddMenuAuthority) //	增加menu和角色关联关系
 	}
 
 }

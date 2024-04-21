@@ -202,3 +202,13 @@ func (authorityService *AuthorityService) GetAuthorityInfo(auth system.SysAuthor
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(&sa).Error
 	return sa, err
 }
+
+// SetMenuAuthority
+//
+//	@Description: 菜单与角色绑定
+func (authorityService *AuthorityService) SetMenuAuthority(auth *system.SysAuthority) error {
+	var s system.SysAuthority
+	global.GVA_DB.Preload("SysBaseMenus").First(&s, "authority_id = ?", auth.AuthorityId)
+	err := global.GVA_DB.Model(&s).Association("SysBaseMenus").Replace(&auth.SysBaseMenus)
+	return err
+}
