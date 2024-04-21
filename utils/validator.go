@@ -14,6 +14,13 @@ func NotEmpty() string {
 	return "notEmpty"
 }
 
+// Ge
+//
+//	@Description: 大于等于入参(>=) 如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
+func Ge(mark string) string {
+	return "ge=" + mark
+}
+
 // Verify
 //
 //	@Description: 校验方法

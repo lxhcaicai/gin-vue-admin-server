@@ -34,3 +34,7 @@ type Meta struct {
 	Icon        string `json:"icon" gorm:"comment:菜单图标"`                // 菜单图标
 	CloseTab    bool   `json:"closeTab" gorm:"comment:自动关闭tab"`         // 自动关闭tab
 }
+
+func (SysBaseMenu) TableName() string {
+	return "sys_base_menus"
+}

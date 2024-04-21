@@ -50,7 +50,8 @@ func Routers() *gin.Engine {
 		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup)    // 字典详情管理
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup) // 文件上传下载功能路由
 		exampleRouter.InitCustomerRouter(PrivateGroup)              // 客户路由
-		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)     // 字典详情管理
+		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)     // 权限按钮管理
+		systemRouter.InitMenuRouter(PrivateGroup)                   // 注册menu路由
 	}
 	global.GVA_LOG.Info("router register success")
 	return Router

@@ -14,6 +14,7 @@ type ApiGroup struct {
 	DictionaryDetailApi
 	DictionaryApi
 	AuthorityBtnApi
+	AuthorityMenuApi
 }
 
 var (
@@ -28,4 +29,5 @@ var (
 	dictionaryDetailService = service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
 	dictionaryService       = service.ServiceGroupApp.SystemServiceGroup.DictionaryService
 	authorityBtnService     = service.ServiceGroupApp.SystemServiceGroup.AuthorityBtnService
+	menuService             = service.ServiceGroupApp.SystemServiceGroup.MenuService
 )

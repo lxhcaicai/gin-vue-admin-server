@@ -12,4 +12,5 @@ type RouterGroup struct {
 	ApiRouter
 	DictionaryDetailRouter
 	AuthorityBtnRouter
+	MenuRouter
 }
