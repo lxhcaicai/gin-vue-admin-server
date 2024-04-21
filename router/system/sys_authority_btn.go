@@ -13,5 +13,6 @@ func (s *AuthorityBtnRouter) InitAuthorityBtnRouterRouter(Router *gin.RouterGrou
 	authorityBtnApi := v1.ApiGroupApp.SystemApiGroup.AuthorityBtnApi
 	{
 		authorityRouterWithoutRecord.POST("getAuthorityBtn", authorityBtnApi.GetAuthorityBtn)
+		authorityRouterWithoutRecord.POST("setAuthorityBtn", authorityBtnApi.SetAuthorityBtn)
 	}
 }

@@ -759,6 +759,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/authorityBtn/setAuthorityBtn": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AuthorityBtn"
+                ],
+                "summary": "设置权限按钮",
+                "parameters": [
+                    {
+                        "description": "菜单id, 角色id, 选中的按钮id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SysAuthorityBtnReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回列表成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/base/captcha": {
             "post": {
                 "security": [
