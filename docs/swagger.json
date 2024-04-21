@@ -1829,6 +1829,48 @@
                 }
             }
         },
+        "/sysDictionary/getSysDictionaryList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionary"
+                ],
+                "summary": "分页获取SysDictionary列表",
+                "responses": {
+                    "200": {
+                        "description": "分页获取SysDictionary列表,返回包括列表,总数,页码,每页数量",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.PageResult"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/sysDictionary/updateSysDictionary": {
             "put": {
                 "security": [

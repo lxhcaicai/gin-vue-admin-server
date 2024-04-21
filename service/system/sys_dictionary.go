@@ -81,3 +81,12 @@ func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uin
 	}).First(&sysDictionary).Error
 	return
 }
+
+// GetSysDictionaryInfoList
+//
+//	@Description: 分页获取字典列表
+func (dictionaryService *DictionaryService) GetSysDictionaryInfoList() (list interface{}, err error) {
+	var sysDictionarys []system.SysDictionary
+	err = global.GVA_DB.Find(&sysDictionarys).Error
+	return sysDictionarys, err
+}

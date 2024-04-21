@@ -20,5 +20,6 @@ func (s *DictionaryDetailRouter) InitSysDictionaryRouter(Router *gin.RouterGroup
 	}
 	{
 		sysDictionaryRouterWithoutRecord.GET("findSysDictionary", sysDictionaryApi.FindSysDictionary)
+		sysDictionaryRouterWithoutRecord.GET("getSysDictionaryList", sysDictionaryApi.GetSysDictionaryList) // 获取SysDictionary列表
 	}
 }

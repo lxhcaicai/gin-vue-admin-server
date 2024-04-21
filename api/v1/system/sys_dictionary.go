@@ -111,3 +111,21 @@ func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 	}
 	response.OkWithDetailed(gin.H{"resysDictionary": sysDictionary}, "查询成功", c)
 }
+
+// GetSysDictionaryList
+// @Tags      SysDictionary
+// @Summary   分页获取SysDictionary列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "分页获取SysDictionary列表,返回包括列表,总数,页码,每页数量"
+// @Router    /sysDictionary/getSysDictionaryList [get]
+func (s *DictionaryApi) GetSysDictionaryList(c *gin.Context) {
+	list, err := dictionaryService.GetSysDictionaryInfoList()
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(list, "获取成功", c)
+}

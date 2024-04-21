@@ -1946,6 +1946,29 @@ paths:
       summary: 用id查询SysDictionary
       tags:
       - SysDictionary
+  /sysDictionary/getSysDictionaryList:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 分页获取SysDictionary列表,返回包括列表,总数,页码,每页数量
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PageResult'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取SysDictionary列表
+      tags:
+      - SysDictionary
   /sysDictionary/updateSysDictionary:
     put:
       consumes:
