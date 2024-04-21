@@ -1317,6 +1317,27 @@ paths:
       summary: 更新角色信息
       tags:
       - Authority
+  /authorityBtn/canRemoveAuthorityBtn:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 设置权限按钮
+      tags:
+      - AuthorityBtn
   /authorityBtn/getAuthorityBtn:
     post:
       consumes:

@@ -60,3 +60,22 @@ func (a *AuthorityBtnApi) SetAuthorityBtn(c *gin.Context) {
 	}
 	response.OkWithMessage("分配成功", c)
 }
+
+// CanRemoveAuthorityBtn
+// @Tags      AuthorityBtn
+// @Summary   设置权限按钮
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200  {object}  response.Response{msg=string}  "删除成功"
+// @Router    /authorityBtn/canRemoveAuthorityBtn [post]
+func (a *AuthorityBtnApi) CanRemoveAuthorityBtn(c *gin.Context) {
+	id := c.Query("id")
+	err := authorityBtnService.CanRemoveAuthorityBtn(id)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
+}
