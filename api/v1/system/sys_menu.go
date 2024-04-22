@@ -3,6 +3,7 @@ package system
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
+	"github.com/lxhcaicai/gin-vue-admin/server/model/common/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	systemReq "github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
@@ -74,4 +75,34 @@ func (a *AuthorityMenuApi) AddMenuAuthority(c *gin.Context) {
 	} else {
 		response.OkWithMessage("添加成功", c)
 	}
+}
+
+// DeleteBaseMenu
+// @Tags      Menu
+// @Summary   删除菜单
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.GetById                true  "菜单id"
+// @Success   200   {object}  response.Response{msg=string}  "删除菜单"
+// @Router    /menu/deleteBaseMenu [post]
+func (a *AuthorityMenuApi) DeleteBaseMenu(c *gin.Context) {
+	var menu request.GetById
+	err := c.ShouldBindJSON(&menu)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(menu, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = baseMenuService.DeleteBaseMenu(menu.ID)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
 }

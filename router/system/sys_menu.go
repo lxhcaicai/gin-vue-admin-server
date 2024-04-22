@@ -15,6 +15,7 @@ func (m *MenuRouter) InitMenuRouter(Router *gin.RouterGroup) {
 	{
 		menuRouter.POST("addBaseMenu", authorityMenuApi.AddBaseMenu)
 		menuRouter.POST("addMenuAuthority", authorityMenuApi.AddMenuAuthority) //	增加menu和角色关联关系
+		menuRouter.POST("deleteBaseMenu", authorityMenuApi.DeleteBaseMenu)     // 删除菜单
 	}
 
 }

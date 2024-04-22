@@ -2000,6 +2000,34 @@ paths:
       summary: 增加menu和角色关联关系
       tags:
       - AuthorityMenu
+  /menu/deleteBaseMenu:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 菜单id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除菜单
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除菜单
+      tags:
+      - Menu
   /sysDictionary/createSysDictionary:
     post:
       consumes:

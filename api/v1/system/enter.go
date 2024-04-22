@@ -30,4 +30,5 @@ var (
 	dictionaryService       = service.ServiceGroupApp.SystemServiceGroup.DictionaryService
 	authorityBtnService     = service.ServiceGroupApp.SystemServiceGroup.AuthorityBtnService
 	menuService             = service.ServiceGroupApp.SystemServiceGroup.MenuService
+	baseMenuService         = service.ServiceGroupApp.SystemServiceGroup.BaseMenuService
 )
