@@ -106,3 +106,38 @@ func (a *AuthorityMenuApi) DeleteBaseMenu(c *gin.Context) {
 	}
 	response.OkWithMessage("删除成功", c)
 }
+
+// UpdateBaseMenu
+// @Tags      Menu
+// @Summary   更新菜单
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysBaseMenu             true  "路由path, 父菜单ID, 路由name, 对应前端文件路径, 排序标记"
+// @Success   200   {object}  response.Response{msg=string}  "更新菜单"
+// @Router    /menu/updateBaseMenu [post]
+func (a *AuthorityMenuApi) UpdateBaseMenu(c *gin.Context) {
+	var menu system.SysBaseMenu
+	err := c.ShouldBindJSON(&menu)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(menu, utils.MenuVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(menu.Meta, utils.MenuMetaVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = baseMenuService.UpdateBaseMenu(menu)
+	if err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败", c)
+		return
+	}
+	response.OkWithMessage("更新成功", c)
+}
