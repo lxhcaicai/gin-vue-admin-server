@@ -80,3 +80,70 @@ func (menuService *MenuService) AddMenuAuthority(menus []system.SysBaseMenu, aut
 	err = AuthorityServiceApp.SetMenuAuthority(&auth)
 	return err
 }
+
+func (menuService *MenuService) GetMenuTree(authorityId uint) (menus []system.SysMenu, err error) {
+	menuTree, err := menuService.getMenuTreeMap(authorityId)
+	menus = menuTree["0"]
+	for i := 0; i < len(menus); i++ {
+		err = menuService.getChildrenList(&menus[i], menuTree)
+	}
+	return menus, err
+}
+
+func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[string][]system.SysMenu, err error) {
+	var allMenus []system.SysMenu
+	var baseMenu []system.SysBaseMenu
+	var btns []system.SysAuthorityBtn
+	treeMap = make(map[string][]system.SysMenu)
+
+	var SysAuthorityMenus []system.SysAuthorityMenu
+	err = global.GVA_DB.Where("sys_authority_authority_id = ?", authorityId).Find(&SysAuthorityMenus).Error
+	if err != nil {
+		return
+	}
+
+	var MenuIds []string
+
+	err = global.GVA_DB.Where("id in (?)", MenuIds).Order("sort").Preload("Parameters").Find(&baseMenu).Error
+	if err != nil {
+		return
+	}
+
+	for i := range baseMenu {
+		allMenus = append(allMenus, system.SysMenu{
+			SysBaseMenu: baseMenu[i],
+			AuthorityId: authorityId,
+			MenuId:      strconv.Itoa(int(baseMenu[i].ID)),
+			Parameters:  baseMenu[i].Parameters,
+		})
+	}
+
+	err = global.GVA_DB.Where("authority_id = ?", authorityId).Preload("SysBaseMenuBtn").Find(&btns).Error
+	if err != nil {
+		return
+	}
+	var btnMap = make(map[uint]map[string]uint)
+	for _, v := range btns {
+		if btnMap[v.SysMenuID] == nil {
+			btnMap[v.SysMenuID] = make(map[string]uint)
+		}
+		btnMap[v.SysBaseMenuBtnID][v.SysBaseMenuBtn.Name] = authorityId
+	}
+
+	for _, v := range allMenus {
+		v.Btns = btnMap[v.SysBaseMenu.ID]
+		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
+	}
+	return treeMap, err
+}
+
+// getChildrenList
+//
+//	@Description: 获取子菜单
+func (menuService *MenuService) getChildrenList(menu *system.SysMenu, treeMap map[string][]system.SysMenu) (err error) {
+	menu.Children = treeMap[menu.MenuId]
+	for i := 0; i < len(menu.Children); i++ {
+		err = menuService.getChildrenList(&menu.Children[i], treeMap)
+	}
+	return err
+}

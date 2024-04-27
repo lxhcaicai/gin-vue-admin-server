@@ -342,6 +342,8 @@ definitions:
         description: 密码
         type: string
     type: object
+  request.Empty:
+    type: object
   request.GetById:
     properties:
       id:
@@ -603,6 +605,13 @@ definitions:
       config:
         $ref: '#/definitions/config.Server'
     type: object
+  response.SysMenusResponse:
+    properties:
+      menus:
+        items:
+          $ref: '#/definitions/system.SysMenu'
+        type: array
+    type: object
   response.SysUserResponse:
     properties:
       user:
@@ -834,6 +843,62 @@ definitions:
         type: string
       value:
         description: 字典值
+        type: string
+    type: object
+  system.SysMenu:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      authoritys:
+        items:
+          $ref: '#/definitions/system.SysAuthority'
+        type: array
+      btns:
+        additionalProperties:
+          type: integer
+        type: object
+      children:
+        items:
+          $ref: '#/definitions/system.SysMenu'
+        type: array
+      component:
+        description: 对应前端文件路径
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      hidden:
+        description: 是否在列表隐藏
+        type: boolean
+      menuBtn:
+        items:
+          $ref: '#/definitions/system.SysBaseMenuBtn'
+        type: array
+      menuId:
+        type: string
+      meta:
+        allOf:
+        - $ref: '#/definitions/system.Meta'
+        description: 附加属性
+      name:
+        description: 路由name
+        type: string
+      parameters:
+        items:
+          $ref: '#/definitions/system.SysBaseMenuParameter'
+        type: array
+      parentId:
+        description: 父菜单ID
+        type: string
+      path:
+        description: 路由path
+        type: string
+      sort:
+        description: 排序标记
+        type: integer
+      updatedAt:
+        description: 更新时间
         type: string
     type: object
   system.SysOperationRecord:
@@ -2028,6 +2093,34 @@ paths:
       summary: 删除菜单
       tags:
       - Menu
+  /menu/getMenu:
+    post:
+      parameters:
+      - description: 空
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.Empty'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取用户动态路由,返回包括系统菜单详情列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.SysMenusResponse'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户动态路由
+      tags:
+      - AuthorityMenu
   /menu/updateBaseMenu:
     post:
       consumes:

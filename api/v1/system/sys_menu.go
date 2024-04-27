@@ -7,6 +7,7 @@ import (
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
 	systemReq "github.com/lxhcaicai/gin-vue-admin/server/model/system/request"
+	systemRes "github.com/lxhcaicai/gin-vue-admin/server/model/system/response"
 	"github.com/lxhcaicai/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
 )
@@ -140,4 +141,25 @@ func (a *AuthorityMenuApi) UpdateBaseMenu(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("更新成功", c)
+}
+
+// GetMenu
+// @Tags      AuthorityMenu
+// @Summary   获取用户动态路由
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Param     data  body      request.Empty                                                  true  "空"
+// @Success   200   {object}  response.Response{data=systemRes.SysMenusResponse,msg=string}  "获取用户动态路由,返回包括系统菜单详情列表"
+// @Router    /menu/getMenu [post]
+func (a *AuthorityMenuApi) GetMenu(c *gin.Context) {
+	menus, err := menuService.GetMenuTree(utils.GetUserAuthorityId(c))
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	if menus == nil {
+		menus = []system.SysMenu{}
+	}
+	response.OkWithDetailed(systemRes.SysMenusResponse{Menus: menus}, "获取成功", c)
 }
