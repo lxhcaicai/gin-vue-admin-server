@@ -1945,6 +1945,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/menu/getBaseMenuTree": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AuthorityMenu"
+                ],
+                "summary": "获取用户动态路由",
+                "parameters": [
+                    {
+                        "description": "空",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.Empty"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取用户动态路由,返回包括系统菜单列表",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.SysBaseMenusResponse"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/menu/getMenu": {
             "post": {
                 "security": [
@@ -4664,6 +4714,17 @@ const docTemplate = `{
             "properties": {
                 "authority": {
                     "$ref": "#/definitions/system.SysAuthority"
+                }
+            }
+        },
+        "response.SysBaseMenusResponse": {
+            "type": "object",
+            "properties": {
+                "menus": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysBaseMenu"
+                    }
                 }
             }
         },

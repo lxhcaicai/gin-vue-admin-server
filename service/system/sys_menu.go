@@ -184,3 +184,15 @@ func (menuService *MenuService) getBaseChildrenList(menu *system.SysBaseMenu, tr
 	}
 	return err
 }
+
+// GetBaseMenuTree
+//
+//	@Description: 获取基础路由树
+func (menuService *MenuService) GetBaseMenuTree() (menus []system.SysBaseMenu, err error) {
+	treeMap, err := menuService.getBaseMenuTreeMap()
+	menus = treeMap["0"]
+	for i := 0; i < len(menus); i++ {
+		err = menuService.getBaseChildrenList(&menus[i], treeMap)
+	}
+	return menus, err
+}

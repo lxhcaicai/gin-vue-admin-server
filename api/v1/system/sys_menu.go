@@ -198,3 +198,21 @@ func (a *AuthorityMenuApi) GetMenuList(c *gin.Context) {
 		PageSize: pageInfo.PageSize,
 	}, "获取成功", c)
 }
+
+// GetBaseMenuTree
+// @Tags      AuthorityMenu
+// @Summary   获取用户动态路由
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Param     data  body      request.Empty                                                      true  "空"
+// @Success   200   {object}  response.Response{data=systemRes.SysBaseMenusResponse,msg=string}  "获取用户动态路由,返回包括系统菜单列表"
+// @Router    /menu/getBaseMenuTree [post]
+func (a *AuthorityMenuApi) GetBaseMenuTree(c *gin.Context) {
+	menus, err := menuService.GetBaseMenuTree()
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(systemRes.SysBaseMenusResponse{Menus: menus}, "获取成功", c)
+}

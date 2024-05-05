@@ -589,6 +589,13 @@ definitions:
       authority:
         $ref: '#/definitions/system.SysAuthority'
     type: object
+  response.SysBaseMenusResponse:
+    properties:
+      menus:
+        items:
+          $ref: '#/definitions/system.SysBaseMenu'
+        type: array
+    type: object
   response.SysCaptchaResponse:
     properties:
       captchaId:
@@ -2093,6 +2100,34 @@ paths:
       summary: 删除菜单
       tags:
       - Menu
+  /menu/getBaseMenuTree:
+    post:
+      parameters:
+      - description: 空
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.Empty'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取用户动态路由,返回包括系统菜单列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.SysBaseMenusResponse'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户动态路由
+      tags:
+      - AuthorityMenu
   /menu/getMenu:
     post:
       parameters:

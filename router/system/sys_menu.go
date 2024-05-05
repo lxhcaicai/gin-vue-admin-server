@@ -22,6 +22,7 @@ func (m *MenuRouter) InitMenuRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 	{
 		menuRouterWithoutRecord.POST("getMenu", authorityMenuApi.GetMenu)
 		menuRouterWithoutRecord.POST("getMenuList", authorityMenuApi.GetMenuList)
+		menuRouterWithoutRecord.POST("getBaseMenuTree", authorityMenuApi.GetBaseMenuTree)
 	}
 	return menuRouter
 }
