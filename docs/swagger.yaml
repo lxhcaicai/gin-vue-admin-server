@@ -344,6 +344,12 @@ definitions:
     type: object
   request.Empty:
     type: object
+  request.GetAuthorityId:
+    properties:
+      authorityId:
+        description: 角色ID
+        type: integer
+    type: object
   request.GetById:
     properties:
       id:
@@ -2154,6 +2160,37 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 获取用户动态路由
+      tags:
+      - AuthorityMenu
+  /menu/getMenuAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 角色ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetAuthorityId'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取指定角色menu
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取指定角色menu
       tags:
       - AuthorityMenu
   /menu/getMenuList:
