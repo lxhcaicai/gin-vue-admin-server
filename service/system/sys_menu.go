@@ -147,3 +147,40 @@ func (menuService *MenuService) getChildrenList(menu *system.SysMenu, treeMap ma
 	}
 	return err
 }
+
+// GetInfoList
+//
+//	@Description: 获取路由分页
+func (menuService *MenuService) GetInfoList() (list interface{}, total int64, err error) {
+	var menuList []system.SysBaseMenu
+	treeMap, err := menuService.getBaseMenuTreeMap()
+	menuList = treeMap["0"]
+	for i := 0; i < len(menuList); i++ {
+		err = menuService.getBaseChildrenList(&menuList[i], treeMap)
+	}
+	return menuList, total, err
+}
+
+// getBaseMenuTreeMap
+//
+//	@Description: 获取路由总树map
+func (menuService *MenuService) getBaseMenuTreeMap() (treeMap map[string][]system.SysBaseMenu, err error) {
+	var allMenus []system.SysBaseMenu
+	treeMap = make(map[string][]system.SysBaseMenu)
+	err = global.GVA_DB.Order("sort").Preload("MenuBtn").Preload("Parameters").Find(&allMenus).Error
+	for _, v := range allMenus {
+		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
+	}
+	return treeMap, err
+}
+
+// (menu *system.SysBaseMenu, treeMap map[string][]system.SysBaseMenu)
+//
+//	@Description: 获取菜单的子菜单
+func (menuService *MenuService) getBaseChildrenList(menu *system.SysBaseMenu, treeMap map[string][]system.SysBaseMenu) (err error) {
+	menu.Children = treeMap[strconv.Itoa(int(menu.ID))]
+	for i := 0; i < len(menu.Children); i++ {
+		err = menuService.getBaseChildrenList(&menu.Children[i], treeMap)
+	}
+	return err
+}
