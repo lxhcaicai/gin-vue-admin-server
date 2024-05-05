@@ -595,6 +595,11 @@ definitions:
       authority:
         $ref: '#/definitions/system.SysAuthority'
     type: object
+  response.SysBaseMenuResponse:
+    properties:
+      menu:
+        $ref: '#/definitions/system.SysBaseMenu'
+    type: object
   response.SysBaseMenusResponse:
     properties:
       menus:
@@ -2104,6 +2109,36 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除菜单
+      tags:
+      - Menu
+  /menu/getBaseMenuById:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 菜单id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 根据id获取菜单,返回包括系统菜单列表
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.SysBaseMenuResponse'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 根据id获取菜单
       tags:
       - Menu
   /menu/getBaseMenuTree:

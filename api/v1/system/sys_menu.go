@@ -248,3 +248,35 @@ func (a *AuthorityMenuApi) GetMenuAuthority(c *gin.Context) {
 	}
 	response.OkWithDetailed(gin.H{"menus": menus}, "获取成功", c)
 }
+
+// GetBaseMenuById
+// @Tags      Menu
+// @Summary   根据id获取菜单
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.GetById                                                   true  "菜单id"
+// @Success   200   {object}  response.Response{data=systemRes.SysBaseMenuResponse,msg=string}  "根据id获取菜单,返回包括系统菜单列表"
+// @Router    /menu/getBaseMenuById [post]
+func (a *AuthorityMenuApi) GetBaseMenuById(c *gin.Context) {
+	var idInfo request.GetById
+	err := c.ShouldBindJSON(&idInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(idInfo, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	menu, err := baseMenuService.GetBaseMenuById(idInfo.ID)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(systemRes.SysBaseMenuResponse{
+		Menu: menu,
+	}, "获取成功", c)
+}

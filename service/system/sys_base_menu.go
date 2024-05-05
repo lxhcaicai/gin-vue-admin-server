@@ -111,3 +111,11 @@ func (b *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) (err error) {
 
 	return err
 }
+
+// GetBaseMenuById
+//
+//	@Description: 返回当前选中menu
+func (b *BaseMenuService) GetBaseMenuById(id int) (menu system.SysBaseMenu, err error) {
+	err = global.GVA_DB.Preload("MenuBtn").Preload("Parameters").Where("id = ?", id).First(&menu).Error
+	return
+}
