@@ -96,3 +96,36 @@ func (sysExportTemplateApi *SysExportTemplateApi) DeleteSysExportTemplateByIds(c
 		response.OkWithMessage("批量删除成功", c)
 	}
 }
+
+// UpdateSysExportTemplate 更新导出模板
+// @Tags SysExportTemplate
+// @Summary 更新导出模板
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body system.SysExportTemplate true "更新导出模板"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
+// @Router /sysExportTemplate/updateSysExportTemplate [put]
+func (sysExportTemplateApi *SysExportTemplateApi) UpdateSysExportTemplate(c *gin.Context) {
+	var sysExportTemplate system.SysExportTemplate
+	err := c.ShouldBindJSON(&sysExportTemplate)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	verify := utils.Rules{
+		"Name": {
+			utils.NotEmpty(),
+		},
+	}
+	if err := utils.Verify(sysExportTemplate, verify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := sysExportTemplateService.UpdateSysExportTemplate(sysExportTemplate); err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败", c)
+	} else {
+		response.OkWithMessage("更新成功", c)
+	}
+}
