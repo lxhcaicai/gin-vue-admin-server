@@ -15,3 +15,11 @@ func (sysExportTemplateService *SysExportTemplateService) CreateSysExportTemplat
 	err = global.GVA_DB.Create(sysExportTemplate).Error
 	return err
 }
+
+// DeleteSysExportTemplate
+//
+//	@Description: 批量删除导出模板记录
+func (sysExportTemplateService *SysExportTemplateService) DeleteSysExportTemplate(sysExportTemplate system.SysExportTemplate) (err error) {
+	err = global.GVA_DB.Delete(&sysExportTemplate).Error
+	return err
+}

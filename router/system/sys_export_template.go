@@ -15,5 +15,6 @@ func (s *SysExportTemplateRouter) InitSysExportTemplateRouter(Router *gin.Router
 	var sysExportTemplateApi = v1.ApiGroupApp.SystemApiGroup.SysExportTemplateApi
 	{
 		sysExportTemplateRouter.POST("createSysExportTemplate", sysExportTemplateApi.CreateSysExportTemplate)
+		sysExportTemplateRouter.DELETE("deleteSysExportTemplate", sysExportTemplateApi.DeleteSysExportTemplate)
 	}
 }
