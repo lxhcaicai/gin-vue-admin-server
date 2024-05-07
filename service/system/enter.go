@@ -14,4 +14,5 @@ type ServiceGroup struct {
 	AuthorityBtnService
 	MenuService
 	BaseMenuService
+	SysExportTemplateService
 }

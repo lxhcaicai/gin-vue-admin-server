@@ -635,6 +635,26 @@ definitions:
       user:
         $ref: '#/definitions/system.SysUser'
     type: object
+  system.Condition:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      column:
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      from:
+        type: string
+      operator:
+        type: string
+      templateID:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   system.Meta:
     properties:
       activeName:
@@ -861,6 +881,41 @@ definitions:
         type: string
       value:
         description: 字典值
+        type: string
+    type: object
+  system.SysExportTemplate:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      conditions:
+        items:
+          $ref: '#/definitions/system.Condition'
+        type: array
+      createdAt:
+        description: 创建时间
+        type: string
+      dbName:
+        description: 数据库名称
+        type: string
+      limit:
+        type: integer
+      name:
+        description: 模板名称
+        type: string
+      order:
+        type: string
+      tableName:
+        description: 表名称
+        type: string
+      templateID:
+        description: 模板标识
+        type: string
+      templateInfo:
+        description: 模板信息
+        type: string
+      updatedAt:
+        description: 更新时间
         type: string
     type: object
   system.SysMenu:
@@ -2663,6 +2718,29 @@ paths:
       summary: 更新SysDictionaryDetail
       tags:
       - SysDictionaryDetail
+  /sysExportTemplate/createSysExportTemplate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建导出模板
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysExportTemplate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"创建成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建导出模板
+      tags:
+      - SysExportTemplate
   /sysOperationRecord/createSysOperationRecord:
     post:
       consumes:

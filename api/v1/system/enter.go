@@ -15,6 +15,7 @@ type ApiGroup struct {
 	DictionaryApi
 	AuthorityBtnApi
 	AuthorityMenuApi
+	SysExportTemplateApi
 }
 
 var (
