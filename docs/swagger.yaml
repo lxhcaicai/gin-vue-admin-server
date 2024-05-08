@@ -2787,6 +2787,18 @@ paths:
       summary: 批量删除导出模板
       tags:
       - SysExportTemplate
+  /sysExportTemplate/importExcel:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: 导入表格
+      tags:
+      - SysImportTemplate
   /sysExportTemplate/updateSysExportTemplate:
     put:
       consumes:

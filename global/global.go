@@ -9,6 +9,7 @@ import (
 	"go.uber.org/zap"
 	"golang.org/x/sync/singleflight"
 	"gorm.io/gorm"
+	"sync"
 )
 
 var (
@@ -21,4 +22,15 @@ var (
 	BlackCache              local_cache.Cache
 	GVA_REDIS               *redis.Client
 	GVA_Concurrency_Control = &singleflight.Group{}
+	lock                    sync.RWMutex
 )
+
+func MustGetGlobalDBByDBName(dbname string) *gorm.DB {
+	lock.RLock()
+	defer lock.RUnlock()
+	db, ok := GVA_DBList[dbname]
+	if !ok || db == nil {
+		panic("db no init")
+	}
+	return db
+}

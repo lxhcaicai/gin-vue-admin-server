@@ -18,5 +18,6 @@ func (s *SysExportTemplateRouter) InitSysExportTemplateRouter(Router *gin.Router
 		sysExportTemplateRouter.DELETE("deleteSysExportTemplate", sysExportTemplateApi.DeleteSysExportTemplate)
 		sysExportTemplateRouter.DELETE("deleteSysExportTemplateByIds", sysExportTemplateApi.DeleteSysExportTemplateByIds)
 		sysExportTemplateRouter.PUT("updateSysExportTemplate", sysExportTemplateApi.UpdateSysExportTemplate)
+		sysExportTemplateRouter.POST("importExcel", sysExportTemplateApi.ImportExcel)
 	}
 }

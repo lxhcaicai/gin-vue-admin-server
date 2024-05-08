@@ -129,3 +129,31 @@ func (sysExportTemplateApi *SysExportTemplateApi) UpdateSysExportTemplate(c *gin
 		response.OkWithMessage("更新成功", c)
 	}
 }
+
+// ExportExcel 导入表格
+// @Tags SysImportTemplate
+// @Summary 导入表格
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Router /sysExportTemplate/importExcel [post]
+func (sysExportTemplateApi *SysExportTemplateApi) ImportExcel(c *gin.Context) {
+	templateID := c.Query("templateID")
+	if templateID == "" {
+		response.FailWithMessage("模板ID不能为空", c)
+		return
+	}
+	file, err := c.FormFile("file")
+	if err != nil {
+		global.GVA_LOG.Error("文件获取失败!", zap.Error(err))
+		response.FailWithMessage("文件获取失败", c)
+		return
+	}
+	if err := sysExportTemplateService.ImportExcel(templateID, file); err != nil {
+		global.GVA_LOG.Error(err.Error(), zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+	} else {
+		response.OkWithMessage("导入成功", c)
+
+	}
+}

@@ -3013,6 +3013,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/sysExportTemplate/importExcel": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysImportTemplate"
+                ],
+                "summary": "导入表格",
+                "responses": {}
+            }
+        },
         "/sysExportTemplate/updateSysExportTemplate": {
             "put": {
                 "security": [

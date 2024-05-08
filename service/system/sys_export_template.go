@@ -1,10 +1,14 @@
 package system
 
 import (
+	"encoding/json"
 	"github.com/lxhcaicai/gin-vue-admin/server/global"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/common/request"
 	"github.com/lxhcaicai/gin-vue-admin/server/model/system"
+	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
+	"mime/multipart"
+	"time"
 )
 
 type SysExportTemplateService struct {
@@ -53,5 +57,71 @@ func (sysExportTemplateService *SysExportTemplateService) UpdateSysExportTemplat
 			e = tx.Create(&conditions).Error
 		}
 		return e
+	})
+}
+
+func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID string, file *multipart.FileHeader) (err error) {
+	var template system.SysExportTemplate
+	err = global.GVA_DB.First(&template, "template_id = ?", templateID).Error
+	if err != nil {
+		return err
+	}
+
+	src, err := file.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	f, err := excelize.OpenReader(src)
+	if err != nil {
+		return err
+	}
+
+	rows, err := f.GetRows("Sheet1")
+	if err != nil {
+		return err
+	}
+
+	var templateInfoMap = make(map[string]string)
+	err = json.Unmarshal([]byte(template.TemplateInfo), &templateInfoMap)
+	if err != nil {
+		return err
+	}
+
+	var titleKeyMap = make(map[string]string)
+	for key, title := range templateInfoMap {
+		titleKeyMap[title] = key
+	}
+
+	db := global.GVA_DB
+	if template.DBName != "" {
+		db = global.MustGetGlobalDBByDBName(template.DBName)
+	}
+
+	return db.Transaction(func(tx *gorm.DB) error {
+		excelTitle := rows[0]
+		values := rows[1:]
+		for _, row := range values {
+			var item = make(map[string]interface{})
+			for ii, value := range row {
+				key := titleKeyMap[excelTitle[ii]]
+				item[key] = value
+			}
+			needCreated := tx.Migrator().HasColumn(template.TableName, "created_at")
+			needUpdated := tx.Migrator().HasColumn(template.TableName, "updated_at")
+			if item["created_at"] == nil && needCreated {
+				item["created_at"] = time.Now()
+			}
+			if item["updated_at"] == nil && needUpdated {
+				item["updated_at"] = time.Now()
+			}
+
+			cErr := tx.Table(template.TableName).Create(&item).Error
+			if cErr != nil {
+				return cErr
+			}
+		}
+		return nil
 	})
 }
